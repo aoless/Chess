@@ -1,4 +1,5 @@
 #include "field.h"
+#include <QDebug>
 
 Field::Field(int row_, int col_)
 {
@@ -16,6 +17,20 @@ Field::Field(int row_, int col_)
     {
         setVariant(white);
     }
+
+    rect->setAcceptHoverEvents(true);
+}
+
+void Field::hoverEnterEvent(QGraphicsSceneHoverEvent *)
+{
+    QString c("dupa!");
+    emit showCoordinates(c);
+    update();
+}
+
+void Field::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
+{
+    qDebug() << "dupcia blada";
 }
 
 void Field::setVariant(Field::VARIANT color)

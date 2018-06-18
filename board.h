@@ -18,7 +18,8 @@ private:
 public:
     Board();
     ~Board();
-    QGraphicsRectItem * getSingleSquare(int col, int row);
+    QGraphicsRectItem* getSingleSquare(int row, int col);
+    Field* getField(int row, int col);
     void drawChessBoard(QGraphicsScene *scene);
     void addPiecesToBoard(QGraphicsScene *scene);
 };

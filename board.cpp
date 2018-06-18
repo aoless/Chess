@@ -1,4 +1,5 @@
 #include "board.h"
+#include "mainwindow.h"
 
 Board::Board()
 {
@@ -24,6 +25,11 @@ QGraphicsRectItem * Board::getSingleSquare(int col, int row)
     return fields[col][row]->drawSquare();
 }
 
+Field *Board::getField(int row, int col)
+{
+    return fields[row][col];
+}
+
 void Board::drawChessBoard(QGraphicsScene *scene)
 {
     qreal x = 0; qreal y = 0;
@@ -43,6 +49,5 @@ void Board::drawChessBoard(QGraphicsScene *scene)
 void Board::addPiecesToBoard(QGraphicsScene *scene)
 {
     scene->addItem(pawn);
-
 }
 

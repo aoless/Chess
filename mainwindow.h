@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QGraphicsScene>
 #include "board.h"
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -15,10 +16,11 @@ class MainWindow : public QMainWindow
 private:
     QGraphicsScene *scene;
     Board *board;
+    QLabel *coordinates;
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
+    void connecter();
 
 private:
     Ui::MainWindow *ui;

@@ -22,7 +22,7 @@
      <rect>
       <x>90</x>
       <y>90</y>
-      <width>822</width>
+      <width>820</width>
       <height>820</height>
      </rect>
     </property>
@@ -45,6 +45,19 @@
      </size>
     </property>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>480</x>
+      <y>50</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -52,7 +65,7 @@
      <x>0</x>
      <y>0</y>
      <width>1000</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
   </widget>

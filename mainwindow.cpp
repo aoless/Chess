@@ -14,6 +14,18 @@ MainWindow::MainWindow(QWidget *parent) :
     board = new Board();
     board->drawChessBoard(scene);
     board->addPiecesToBoard(scene);
+    connecter();
+}
+
+void MainWindow::connecter()
+{
+    for (int i = 0; i < 8; i++)
+    {
+        for (int j = 0; j < 8; j++)
+        {
+            connect(board->getField(i, j), Field::showCoordinates, ui->label, QLabel::setText);
+        }
+    }
 }
 
 MainWindow::~MainWindow()
