@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>dark.jpg</file>
+        <file>white.jpg</file>
+        <file>figures images/pionek.PNG</file>
+    </qresource>
+</RCC>
