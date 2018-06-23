@@ -6,7 +6,8 @@
 class PawnFigure : virtual public AbstractFigure
 {
 public:
-    PawnFigure();
+    enum color { white, black };
+    PawnFigure(color type);
 };
 
 #endif // PAWNFIGURE_H

@@ -14,15 +14,16 @@ private:
     enum VARIANT { white, black };
     const int size = 100;
     std::pair<int, int> position;
-    QGraphicsRectItem * rect;
+    //QGraphicsRectItem *rect;
     QPixmap fieldColor;
 public:
     void setVariant(VARIANT color);
-    QGraphicsRectItem * drawSquare() { return rect; }
+    QGraphicsRectItem* drawSquare() { return this; }
     Field(int row, int col);
-    ~Field() { delete rect; }
+    ~Field() { }
     void hoverEnterEvent(QGraphicsSceneHoverEvent *);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 signals:
     void showCoordinates(QString);
 };

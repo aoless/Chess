@@ -14,12 +14,13 @@ class Board
 {
 private:
     squareMatrix fields;
-    PawnFigure *pawn;
+    PawnFigure *white_pawn;
+    PawnFigure *black_pawn;
 public:
     Board();
     ~Board();
-    QGraphicsRectItem* getSingleSquare(int row, int col);
-    Field* getField(int row, int col);
+    QGraphicsRectItem *getSingleSquare(int row, int col);
+    Field *getField(int row, int col);
     void drawChessBoard(QGraphicsScene *scene);
     void addPiecesToBoard(QGraphicsScene *scene);
 };

@@ -10,7 +10,8 @@ Board::Board()
             fields[i][j] = new Field(i, j);
         }
     }
-    pawn = new PawnFigure();
+    white_pawn = new PawnFigure(PawnFigure::white);
+    black_pawn = new PawnFigure(PawnFigure::black);
 }
 
 Board::~Board()
@@ -48,6 +49,7 @@ void Board::drawChessBoard(QGraphicsScene *scene)
 
 void Board::addPiecesToBoard(QGraphicsScene *scene)
 {
-    scene->addItem(pawn);
+    scene->addItem(white_pawn);
+    scene->addItem(black_pawn);
 }
 

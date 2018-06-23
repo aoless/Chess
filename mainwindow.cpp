@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     scene = new QGraphicsScene(this);
+    scene->setSceneRect(0, 0, 800, 800);
     ui->graphicsView->setScene(scene);
     scene->setBackgroundBrush(QBrush(QPixmap(":/dark.jpg")));
     board = new Board();

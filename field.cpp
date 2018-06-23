@@ -1,10 +1,11 @@
 #include "field.h"
 #include <QDebug>
+#include <QGraphicsView>
 
 Field::Field(int row_, int col_)
 {
     position = std::make_pair(row_, col_);
-    rect = new QGraphicsRectItem(0, 0, size, size);
+    setRect(0, 0, 100, 100);
     if (position.first % 2 == 0 && position.second % 2 != 0)
     {
         setVariant(black);
@@ -18,19 +19,24 @@ Field::Field(int row_, int col_)
         setVariant(white);
     }
 
-    rect->setAcceptHoverEvents(true);
+    setAcceptHoverEvents(true);
 }
 
-void Field::hoverEnterEvent(QGraphicsSceneHoverEvent *)
+void Field::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-    QString c("dupa!");
+    QString c  = QString::number(this->x()) + " " + QString::number(this->y());
     emit showCoordinates(c);
     update();
 }
 
 void Field::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 {
-    qDebug() << "dupcia blada";
+    //qDebug() << "dupcia blada";
+}
+
+void Field::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+    qDebug() << "pupa";
 }
 
 void Field::setVariant(Field::VARIANT color)
@@ -38,11 +44,11 @@ void Field::setVariant(Field::VARIANT color)
     if (color == white)
     {
         fieldColor = QPixmap(":/white.jpg");
-        rect->setBrush(QBrush(fieldColor));
+        this->setBrush(QBrush(fieldColor));
     }
     else
     {
         fieldColor = QPixmap(":/dark.jpg");
-        rect->setBrush(QBrush(fieldColor));
+        this->setBrush(QBrush(fieldColor));
     }
 }
