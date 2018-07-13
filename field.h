@@ -14,7 +14,6 @@ private:
     enum VARIANT { white, black };
     const int size = 100;
     std::pair<int, int> position;
-    //QGraphicsRectItem *rect;
     QPixmap fieldColor;
 public:
     void setVariant(VARIANT color);
@@ -22,10 +21,9 @@ public:
     Field(int row, int col);
     ~Field() { }
     void hoverEnterEvent(QGraphicsSceneHoverEvent *);
-    void hoverLeaveEvent(QGraphicsSceneHoverEvent *);
-    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
 signals:
-    void showCoordinates(QString);
+    void sendCoordinates(qreal x, qreal y);
+    void showCoordinates(QString c);
 };
 
 #endif // FIELD_H

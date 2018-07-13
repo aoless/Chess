@@ -5,9 +5,13 @@
 
 class PawnFigure : virtual public AbstractFigure
 {
+private:
+    bool beggining = true;
 public:
-    enum color { white, black };
-    PawnFigure(color type);
+    explicit PawnFigure(figureColors type);
+    bool moveIsValid();
+    bool isItPossibleToBeat();
+    bool isItBegginingOfGame();
 };
 
 #endif // PAWNFIGURE_H

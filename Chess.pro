@@ -30,14 +30,18 @@ SOURCES += \
     board.cpp \
     field.cpp \
     abstractfigure.cpp \
-    pawnfigure.cpp
+    pawnfigure.cpp \
+    bishopfigure.cpp \
+    rookfigure.cpp
 
 HEADERS += \
         mainwindow.h \
     board.h \
     field.h \
     abstractfigure.h \
-    pawnfigure.h
+    pawnfigure.h \
+    bishopfigure.h \
+    rookfigure.h
 
 FORMS += \
         mainwindow.ui

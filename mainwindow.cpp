@@ -14,19 +14,15 @@ MainWindow::MainWindow(QWidget *parent) :
     scene->setBackgroundBrush(QBrush(QPixmap(":/dark.jpg")));
     board = new Board();
     board->drawChessBoard(scene);
-    board->addPiecesToBoard(scene);
+    board->createFiguresAndAddPiecesToBoard(scene);
     connecter();
 }
 
 void MainWindow::connecter()
 {
     for (int i = 0; i < 8; i++)
-    {
         for (int j = 0; j < 8; j++)
-        {
             connect(board->getField(i, j), Field::showCoordinates, ui->label, QLabel::setText);
-        }
-    }
 }
 
 MainWindow::~MainWindow()

@@ -22,22 +22,14 @@ Field::Field(int row_, int col_)
     setAcceptHoverEvents(true);
 }
 
-void Field::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+void Field::hoverEnterEvent(QGraphicsSceneHoverEvent *)
 {
     QString c  = QString::number(this->x()) + " " + QString::number(this->y());
     emit showCoordinates(c);
+    emit sendCoordinates(this->x(), this->y());
     update();
 }
 
-void Field::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
-{
-    //qDebug() << "dupcia blada";
-}
-
-void Field::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
-{
-    qDebug() << "pupa";
-}
 
 void Field::setVariant(Field::VARIANT color)
 {
