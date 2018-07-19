@@ -51,9 +51,7 @@ void AbstractFigure::changePossibilityToClick(bool possibility)
     possible_to_click = possibility;
 }
 
-void AbstractFigure::setPosition(qreal x, qreal y)
+void AbstractFigure::setPosition(qreal col, qreal row)
 {
-    row = x; col = y;
-    setPos(row, col);
-
+    setPos(col, row);
 }

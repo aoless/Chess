@@ -30,7 +30,10 @@ public:
     void createFiguresAndAddPiecesToBoard(QGraphicsScene*);
     void addPawnsToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
     void addBishopsToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
+    void addKnightsToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
     void addRooksToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
+    void addQueenToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
+    void addKingToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
     void connecter(AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
 public slots:

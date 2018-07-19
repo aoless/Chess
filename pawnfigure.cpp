@@ -12,7 +12,7 @@ PawnFigure::PawnFigure(figureColors type)
     }
     else
     {
-        this->setBrush(QPixmap(":/figures images/pawn_black2.png").scaledToHeight(100).scaledToWidth(100));
+        this->setBrush(QPixmap(":/figures images/pawn_black.png").scaledToHeight(100).scaledToWidth(100));
     }
 }
 

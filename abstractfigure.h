@@ -36,7 +36,7 @@ signals:
     void unableToPickOtherFigures(bool state);
 
 public slots:
-    void setPosition(qreal x, qreal y);
+    void setPosition(qreal col, qreal row);
 };
 
 #endif // ABSTRACTFIGURE_H

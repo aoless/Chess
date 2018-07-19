@@ -2,12 +2,17 @@
     <qresource prefix="/">
         <file>dark.jpg</file>
         <file>white.jpg</file>
-        <file>figures images/pionek.PNG</file>
         <file>figures images/bishop_black.png</file>
         <file>figures images/pawn_black.png</file>
         <file>figures images/pawn_white.png</file>
         <file>figures images/queen_black.png</file>
-        <file>figures images/tower_black.png</file>
-        <file>figures images/pawn_black2.png</file>
+        <file>figures images/bishop_white.png</file>
+        <file>figures images/king_black.png</file>
+        <file>figures images/king_white.png</file>
+        <file>figures images/knight_black.png</file>
+        <file>figures images/knight_white.png</file>
+        <file>figures images/queen_white.png</file>
+        <file>figures images/rook_black.png</file>
+        <file>figures images/rook_white.png</file>
     </qresource>
 </RCC>

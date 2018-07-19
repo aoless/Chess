@@ -1,10 +1,12 @@
 #include "board.h"
 #include "mainwindow.h"
 #include <QDebug>
-#include <typeinfo>
 #include "pawnfigure.h"
 #include "bishopfigure.h"
+#include "knightfigure.h"
 #include "rookfigure.h"
+#include "queenfigure.h"
+#include "kingfigure.h"
 
 Board::Board()
 {
@@ -56,8 +58,16 @@ void Board::createFigure(figureTypes type, figureColors color)
     case bishop:
         figures["Bishop"].emplace_back(new BishopFigure(color));
         break;
+    case knight:
+        figures["Knight"].emplace_back(new KnightFigure(color));
     case rook:
         figures["Rook"].emplace_back(new RookFigure(color));
+        break;
+    case queen:
+        figures["Queen"].emplace_back(new QueenFigure(color));
+        break;
+    case king:
+        figures["King"].emplace_back(new KingFigure(color));
         break;
     }
 }
@@ -71,14 +81,41 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
         createFigure(pawn, white);
 
     for (int i = 0; i < 2; i++)
-       createFigure(bishop, black);
+        createFigure(bishop, black);
+
+    for (int i = 0; i < 2; i++)
+        createFigure(bishop, white);
+
+    for (int i = 0; i < 2; i++)
+        createFigure(knight, black);
+
+    for (int i = 0; i < 2; i++)
+        createFigure(knight, white);
 
     for (int i = 0; i < 2; i++)
         createFigure(rook, black);
 
+    for (int i = 0; i < 2; i++)
+        createFigure(rook, white);
+
+    for (int i = 0; i < 1; i++)
+        createFigure(queen, black);
+
+    for (int i = 0; i < 1; i++)
+        createFigure(queen, white);
+
+    for (int i = 0; i < 1; i++)
+        createFigure(king, black);
+
+    for (int i = 0; i < 1; i++)
+        createFigure(king, white);
+
     addPawnsToBoard(scene, figures["Pawn"]);
     addBishopsToBoard(scene, figures["Bishop"]);
+    addKnightsToBoard(scene, figures["Knight"]);
     addRooksToBoard(scene, figures["Rook"]);
+    addQueenToBoard(scene, figures["Queen"]);
+    addKingToBoard(scene, figures["King"]);
 }
 
 void Board::addPawnsToBoard(QGraphicsScene* scene, AbstractFigureSharedVec& pawns)
@@ -106,8 +143,24 @@ void Board::addBishopsToBoard(QGraphicsScene* scene, AbstractFigureSharedVec& bi
         bishop->isWhite() ? rowNumber = 700 : rowNumber = 0;
         setUpFigureOnScene(scene, bishop.get(), std::make_pair(colNumber, rowNumber));
         colNumber += 300;
+        if (colNumber > 500)
+            colNumber = 200;
     }
+}
 
+void Board::addKnightsToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& knights)
+{
+    qreal colNumber = 100;
+    qreal rowNumber;
+
+    for (auto& knight : knights)
+    {
+        knight->isWhite() ? rowNumber = 700 : rowNumber = 0;
+        setUpFigureOnScene(scene, knight.get(), std::make_pair(colNumber, rowNumber));
+        colNumber += 500;
+        if (colNumber > 600)
+            colNumber = 100;
+    }
 }
 
 void Board::addRooksToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& rooks)
@@ -120,6 +173,32 @@ void Board::addRooksToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& rook
         rook->isWhite() ? rowNumber = 700 : rowNumber = 0;
         setUpFigureOnScene(scene, rook.get(), std::make_pair(colNumber, rowNumber));
         colNumber += 700;
+        if (colNumber > 700)
+            colNumber = 0;
+    }
+}
+
+void Board::addQueenToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& queens)
+{
+    qreal colNumber = 300;
+    qreal rowNumber;
+
+    for (auto& queen : queens)
+    {
+        queen->isWhite() ? rowNumber = 700 : rowNumber = 0;
+        setUpFigureOnScene(scene, queen.get(), std::make_pair(colNumber, rowNumber));
+    }
+}
+
+void Board::addKingToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& kings)
+{
+    qreal colNumber = 400;
+    qreal rowNumber;
+
+    for (auto& king : kings)
+    {
+        king->isWhite() ? rowNumber = 700 : rowNumber = 0;
+        setUpFigureOnScene(scene, king.get(), std::make_pair(colNumber, rowNumber));
     }
 }
 
@@ -163,6 +242,31 @@ void Board::refuseToMoveFigure(AbstractFigure* figure)
 void Board::changeMovableStateOfAllFigures(bool state)
 {
     for (auto& f : figures["Pawn"])
+    {
+        f->changePossibilityToClick(state);
+    }
+
+    for (auto& f : figures["Bishop"])
+    {
+        f->changePossibilityToClick(state);
+    }
+
+    for (auto& f : figures["Knight"])
+    {
+        f->changePossibilityToClick(state);
+    }
+
+    for (auto& f : figures["Rook"])
+    {
+        f->changePossibilityToClick(state);
+    }
+
+    for (auto& f : figures["Queen"])
+    {
+        f->changePossibilityToClick(state);
+    }
+
+    for (auto& f : figures["King"])
     {
         f->changePossibilityToClick(state);
     }
