@@ -13,6 +13,7 @@ public:
     bool isItPossibleToBeat();
     bool isItBegginingOfGame();
     bool thereIsNoOtherPieceOnField();
+    bool isThereAnythingOnMyWay();
 };
 
 #endif // PAWNFIGURE_H

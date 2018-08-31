@@ -27,19 +27,17 @@ public:
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
     virtual bool thereIsNoOtherPieceOnField() = 0;
+    virtual bool isThereAnythingOnMyWay() = 0;
     void changeStateOfPreviousPosition(qreal x, qreal y);
     bool isWhite();
     void setColor(figureColors c);
     void changePossibilityToClick(bool possibility);
     void fieldIsOccupied(bool occupied);
-
 signals:
     void propagateInfoOfAbilityToMove(AbstractFigure* figure);
     void propagateInfoOfDisabilityToMove(AbstractFigure* figure);
     void unableToPickOtherFigures(bool state);
-    void assignMeSomePlacePlease(AbstractFigure* figurePtr);
     bool checkIfOtherFigureHasSamePosition(qreal col, qreal row);
-
 public slots:
     void setPosition(qreal col, qreal row);
 };

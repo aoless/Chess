@@ -278,57 +278,16 @@ void Board::changeMovableStateOfAllFigures(bool state)
 
 }
 
-bool Board::checkIfThereIsFewFiguresOnSameField(qreal col, qreal row)
+void Board::checkIfThereIsFewFiguresOnSameField(qreal col, qreal row)
 {
     int counter = 0;
-    for (auto& f : figures["Pawn"])
-    {
-        if (f->x() == col && f->y() == row)
-            counter++;
-    }
-
-    for (auto& f : figures["Bishop"])
-    {
-        if (f->x() == col && f->y() == row)
-            counter++;
-    }
-
-    for (auto& f : figures["Knight"])
-    {
-        if (f->x() == col && f->y() == row)
-            counter++;
-    }
-
-    for (auto& f : figures["Rook"])
-    {
-        if (f->x() == col && f->y() == row)
-            counter++;
-    }
-
-    for (auto& f : figures["Queen"])
-    {
-        if (f->x() == col && f->y() == row)
-            counter++;
-    }
-
-    for (auto& f : figures["King"])
-    {
-        if (f->x() == col && f->y() == row)
-            counter++;
-    }
+    for (const auto& piece : figures)
+        for (const auto& p : piece.second)
+            if (p->x() == col && p->y() == row)
+                counter++;
 
     if (counter > 1)
-    {
         emit fieldIsOccupied(true);
-    }
     else
-    {
         emit fieldIsOccupied(false);
-    }
-
-    return false;
 }
-
-// u need to create some connetcer which will assign a particular figure to particular field
-// the problem lays in which way coordinates of figures and fields are kept (well, figures coordinates are not kept at all)
-// possible solution will be to implement some translation function, to unique values in more "chess" style e.g. H8

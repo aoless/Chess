@@ -30,3 +30,8 @@ bool KnightFigure::thereIsNoOtherPieceOnField()
 {
 
 }
+
+bool KnightFigure::isThereAnythingOnMyWay()
+{
+
+}

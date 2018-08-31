@@ -3,14 +3,12 @@
 
 AbstractFigure::AbstractFigure(QObject *parent) : QObject(parent)
 {
-    emit assignMeSomePlacePlease(this);
 }
 
 void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
     if (mode == clicked)
     {
-        qDebug() << "MODE CHANGER FOR: " << previousPosition.first << " " << previousPosition.second;
         emit propagateInfoOfDisabilityToMove(this);
         mode = unclicked;
         if (!moveIsValid())

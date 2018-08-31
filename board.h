@@ -36,7 +36,7 @@ public:
     void addKingToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
-    bool checkIfThereIsFewFiguresOnSameField(qreal col, qreal row);
+    void checkIfThereIsFewFiguresOnSameField(qreal col, qreal row);
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);

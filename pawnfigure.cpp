@@ -80,3 +80,8 @@ bool PawnFigure::thereIsNoOtherPieceOnField()
 {
     emit checkIfOtherFigureHasSamePosition(this->x(), this->y());
 }
+
+bool PawnFigure::isThereAnythingOnMyWay()
+{
+
+}

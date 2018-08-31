@@ -30,3 +30,8 @@ bool RookFigure::thereIsNoOtherPieceOnField()
 {
 
 }
+
+bool RookFigure::isThereAnythingOnMyWay()
+{
+
+}

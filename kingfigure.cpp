@@ -30,3 +30,8 @@ bool KingFigure::thereIsNoOtherPieceOnField()
 {
 
 }
+
+bool KingFigure::isThereAnythingOnMyWay()
+{
+
+}
