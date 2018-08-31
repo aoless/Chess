@@ -25,3 +25,8 @@ bool KingFigure::isItPossibleToBeat()
 {
 
 }
+
+bool KingFigure::thereIsNoOtherPieceOnField()
+{
+
+}

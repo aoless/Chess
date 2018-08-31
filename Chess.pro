@@ -32,6 +32,9 @@ SOURCES += \
     abstractfigure.cpp \
     pawnfigure.cpp \
     bishopfigure.cpp \
+    kingfigure.cpp \
+    knightfigure.cpp \
+    queenfigure.cpp \
     rookfigure.cpp
 
 HEADERS += \
@@ -41,6 +44,9 @@ HEADERS += \
     abstractfigure.h \
     pawnfigure.h \
     bishopfigure.h \
+    kingfigure.h \
+    knightfigure.h \
+    queenfigure.h \
     rookfigure.h
 
 FORMS += \

@@ -29,6 +29,17 @@ bool PawnFigure::moveIsValid()
     isWhite() ? offset = 100 : offset = -100;
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
+    thereIsNoOtherPieceOnField();
+    if (!occupancy)
+    {
+        qDebug() << "Free";
+    }
+    else
+    {
+        qDebug() << "Occupied";
+        return false;
+    }
+
     if (isItPossibleToBeat())
         if (this->x() == previousPosition.first + offset ||
                 (this->x() == previousPosition.first - offset &&
@@ -50,21 +61,22 @@ bool PawnFigure::moveIsValid()
             return true;
         }
 
-//    if (thereIsNoOtherPieceOnField())
-//    {
-//        //implement sth
-//        //probably needs to connect field and pawn
-//    }
-
     return false;
 }
 
 bool PawnFigure::isItPossibleToBeat()
 {
+    // is there a figure on that field?
+    // send field checker
     return false;
 }
 
 bool PawnFigure::isItBegginingOfGame()
 {
     return beggining;
+}
+
+bool PawnFigure::thereIsNoOtherPieceOnField()
+{
+    emit checkIfOtherFigureHasSamePosition(this->x(), this->y());
 }

@@ -25,3 +25,8 @@ bool RookFigure::isItPossibleToBeat()
 {
 
 }
+
+bool RookFigure::thereIsNoOtherPieceOnField()
+{
+
+}

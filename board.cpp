@@ -50,6 +50,7 @@ void Board::drawChessBoard(QGraphicsScene *scene)
 
 void Board::createFigure(figureTypes type, figureColors color)
 {
+    // QObject class has deleted move constructor, that's why we use new instead make_shared<>
     switch(type)
     {
     case pawn:
@@ -60,6 +61,7 @@ void Board::createFigure(figureTypes type, figureColors color)
         break;
     case knight:
         figures["Knight"].emplace_back(new KnightFigure(color));
+        break;
     case rook:
         figures["Rook"].emplace_back(new RookFigure(color));
         break;
@@ -75,40 +77,40 @@ void Board::createFigure(figureTypes type, figureColors color)
 void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
 {
     for (int i = 0; i < 8; i++)
-        createFigure(pawn, black);
+        createFigure(pawn, figureColors::black);
 
     for (int i = 0; i < 8; i++)
-        createFigure(pawn, white);
+        createFigure(pawn, figureColors::white);
 
     for (int i = 0; i < 2; i++)
-        createFigure(bishop, black);
+        createFigure(bishop, figureColors::black);
 
     for (int i = 0; i < 2; i++)
-        createFigure(bishop, white);
+        createFigure(bishop, figureColors::white);
 
     for (int i = 0; i < 2; i++)
-        createFigure(knight, black);
+        createFigure(knight, figureColors::black);
 
     for (int i = 0; i < 2; i++)
-        createFigure(knight, white);
+        createFigure(knight, figureColors::white);
 
     for (int i = 0; i < 2; i++)
-        createFigure(rook, black);
+        createFigure(rook, figureColors::black);
 
     for (int i = 0; i < 2; i++)
-        createFigure(rook, white);
+        createFigure(rook, figureColors::white);
 
     for (int i = 0; i < 1; i++)
-        createFigure(queen, black);
+        createFigure(queen, figureColors::black);
 
     for (int i = 0; i < 1; i++)
-        createFigure(queen, white);
+        createFigure(queen, figureColors::white);
 
     for (int i = 0; i < 1; i++)
-        createFigure(king, black);
+        createFigure(king, figureColors::black);
 
     for (int i = 0; i < 1; i++)
-        createFigure(king, white);
+        createFigure(king, figureColors::white);
 
     addPawnsToBoard(scene, figures["Pawn"]);
     addBishopsToBoard(scene, figures["Bishop"]);
@@ -118,7 +120,7 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
     addKingToBoard(scene, figures["King"]);
 }
 
-void Board::addPawnsToBoard(QGraphicsScene* scene, AbstractFigureSharedVec& pawns)
+void Board::addPawnsToBoard(QGraphicsScene* scene, const AbstractFigureSharedVec& pawns)
 {
     qreal colNumber = 0;
     qreal rowNumber;
@@ -133,7 +135,7 @@ void Board::addPawnsToBoard(QGraphicsScene* scene, AbstractFigureSharedVec& pawn
     }
 }
 
-void Board::addBishopsToBoard(QGraphicsScene* scene, AbstractFigureSharedVec& bishops)
+void Board::addBishopsToBoard(QGraphicsScene* scene, const AbstractFigureSharedVec& bishops)
 {
     qreal colNumber = 200;
     qreal rowNumber;
@@ -148,7 +150,7 @@ void Board::addBishopsToBoard(QGraphicsScene* scene, AbstractFigureSharedVec& bi
     }
 }
 
-void Board::addKnightsToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& knights)
+void Board::addKnightsToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& knights)
 {
     qreal colNumber = 100;
     qreal rowNumber;
@@ -163,7 +165,7 @@ void Board::addKnightsToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& kn
     }
 }
 
-void Board::addRooksToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& rooks)
+void Board::addRooksToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& rooks)
 {
     qreal colNumber = 0;
     qreal rowNumber;
@@ -178,7 +180,7 @@ void Board::addRooksToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& rook
     }
 }
 
-void Board::addQueenToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& queens)
+void Board::addQueenToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& queens)
 {
     qreal colNumber = 300;
     qreal rowNumber;
@@ -190,7 +192,7 @@ void Board::addQueenToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& quee
     }
 }
 
-void Board::addKingToBoard(QGraphicsScene *scene, AbstractFigureSharedVec& kings)
+void Board::addKingToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& kings)
 {
     qreal colNumber = 400;
     qreal rowNumber;
@@ -210,11 +212,14 @@ void Board::setUpFigureOnScene(QGraphicsScene* scene, AbstractFigure* figure, st
     connecter(figure);
 }
 
-void Board::connecter(AbstractFigure* figure)
+void Board::connecter(const AbstractFigure* figure)
 {
-    connect(figure, AbstractFigure::connectThisShit, this, Board::enableToMoveFigure);
-    connect(figure, AbstractFigure::disconnectThisShit, this, Board::refuseToMoveFigure);
+    connect(figure, AbstractFigure::propagateInfoOfAbilityToMove, this, Board::enableToMoveFigure);
+    connect(figure, AbstractFigure::propagateInfoOfDisabilityToMove, this, Board::refuseToMoveFigure);
     connect(figure, AbstractFigure::unableToPickOtherFigures, this, Board::changeMovableStateOfAllFigures);
+    connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition,
+        this, Board::checkIfThereIsFewFiguresOnSameField);
+    connect(this, Board::fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
@@ -273,3 +278,57 @@ void Board::changeMovableStateOfAllFigures(bool state)
 
 }
 
+bool Board::checkIfThereIsFewFiguresOnSameField(qreal col, qreal row)
+{
+    int counter = 0;
+    for (auto& f : figures["Pawn"])
+    {
+        if (f->x() == col && f->y() == row)
+            counter++;
+    }
+
+    for (auto& f : figures["Bishop"])
+    {
+        if (f->x() == col && f->y() == row)
+            counter++;
+    }
+
+    for (auto& f : figures["Knight"])
+    {
+        if (f->x() == col && f->y() == row)
+            counter++;
+    }
+
+    for (auto& f : figures["Rook"])
+    {
+        if (f->x() == col && f->y() == row)
+            counter++;
+    }
+
+    for (auto& f : figures["Queen"])
+    {
+        if (f->x() == col && f->y() == row)
+            counter++;
+    }
+
+    for (auto& f : figures["King"])
+    {
+        if (f->x() == col && f->y() == row)
+            counter++;
+    }
+
+    if (counter > 1)
+    {
+        emit fieldIsOccupied(true);
+    }
+    else
+    {
+        emit fieldIsOccupied(false);
+    }
+
+    return false;
+}
+
+// u need to create some connetcer which will assign a particular figure to particular field
+// the problem lays in which way coordinates of figures and fields are kept (well, figures coordinates are not kept at all)
+// possible solution will be to implement some translation function, to unique values in more "chess" style e.g. H8

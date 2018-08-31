@@ -9,6 +9,7 @@ public:
     explicit RookFigure(figureColors color);
     bool moveIsValid();
     bool isItPossibleToBeat();
+    bool thereIsNoOtherPieceOnField();
 
 signals:
 

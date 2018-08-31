@@ -25,3 +25,8 @@ bool KnightFigure::isItPossibleToBeat()
 {
 
 }
+
+bool KnightFigure::thereIsNoOtherPieceOnField()
+{
+
+}

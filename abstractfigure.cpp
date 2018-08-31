@@ -3,29 +3,29 @@
 
 AbstractFigure::AbstractFigure(QObject *parent) : QObject(parent)
 {
+    emit assignMeSomePlacePlease(this);
 }
 
 void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
 {
     if (mode == clicked)
     {
-        emit disconnectThisShit(this);
+        qDebug() << "MODE CHANGER FOR: " << previousPosition.first << " " << previousPosition.second;
+        emit propagateInfoOfDisabilityToMove(this);
         mode = unclicked;
         if (!moveIsValid())
         {
             setPosition(previousPosition.first, previousPosition.second);
         }
-
-        changeStateOfPreviousPosition(row, col);
         emit unableToPickOtherFigures(true);
+        changeStateOfPreviousPosition(this->x(), this->y());
     }
     else if (mode == unclicked && possible_to_click)
     {
         emit unableToPickOtherFigures(false);
-        emit connectThisShit(this);
+        emit propagateInfoOfAbilityToMove(this);
         mode = clicked;
     }
-
 }
 
 void AbstractFigure::changeStateOfPreviousPosition(qreal x, qreal y)
@@ -36,9 +36,7 @@ void AbstractFigure::changeStateOfPreviousPosition(qreal x, qreal y)
 
 bool AbstractFigure::isWhite()
 {
-    if (color == white)
-        return true;
-    return false;
+    return color == figureColors::white ? true : false;
 }
 
 void AbstractFigure::setColor(figureColors c)
@@ -49,6 +47,11 @@ void AbstractFigure::setColor(figureColors c)
 void AbstractFigure::changePossibilityToClick(bool possibility)
 {
     possible_to_click = possibility;
+}
+
+void AbstractFigure::fieldIsOccupied(bool occupied)
+{
+    occupancy = occupied;
 }
 
 void AbstractFigure::setPosition(qreal col, qreal row)

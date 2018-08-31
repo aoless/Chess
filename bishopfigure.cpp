@@ -1,5 +1,6 @@
 #include "bishopfigure.h"
 #include <QBrush>
+#include <cmath>
 
 BishopFigure::BishopFigure(figureColors type)
 {
@@ -18,10 +19,34 @@ BishopFigure::BishopFigure(figureColors type)
 
 bool BishopFigure::moveIsValid()
 {
+    // position does not change
+    if (this->x() == previousPosition.first &&
+            this->y() == previousPosition.second)
+        return true;
+
+    int rowOffset = abs(this->y() - previousPosition.second);
+
+    if ((rowOffset == abs(this->x() - previousPosition.first)))
+    {
+        // check if there is no piece on the way!
+        // if not:
+        return true;
+        // else:
+        // return false
+    }
+
+
+    return false;
+
 
 }
 
 bool BishopFigure::isItPossibleToBeat()
+{
+
+}
+
+bool BishopFigure::thereIsNoOtherPieceOnField()
 {
 
 }

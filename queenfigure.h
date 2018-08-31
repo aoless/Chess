@@ -5,11 +5,10 @@
 
 class QueenFigure: virtual public AbstractFigure
 {
-private:
-    bool beggining = true;
 public:
     explicit QueenFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
+    bool thereIsNoOtherPieceOnField();
 };
 #endif // QUEENFIGURE_H

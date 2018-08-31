@@ -5,12 +5,11 @@
 
 class KnightFigure: virtual public AbstractFigure
 {
-private:
-    bool beggining = true;
 public:
     explicit KnightFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
+    bool thereIsNoOtherPieceOnField();
 };
 
 #endif // KNIGHTFIGURE_H

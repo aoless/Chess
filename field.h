@@ -6,6 +6,7 @@
 #include <utility>
 #include <QGraphicsSceneEvent>
 #include <QMouseEvent>
+#include "abstractfigure.h"
 
 class Field : public QObject, public QGraphicsRectItem
 {
@@ -15,6 +16,9 @@ private:
     const int size = 100;
     std::pair<int, int> position;
     QPixmap fieldColor;
+    std::shared_ptr<AbstractFigure> figure;
+protected:
+    bool hasFigure = false;
 public:
     void setVariant(VARIANT color);
     QGraphicsRectItem* drawSquare() { return this; }

@@ -1,5 +1,6 @@
 #include "field.h"
 #include <QDebug>
+#include <memory>
 #include <QGraphicsView>
 
 Field::Field(int row_, int col_)
@@ -29,7 +30,6 @@ void Field::hoverEnterEvent(QGraphicsSceneHoverEvent *)
     emit sendCoordinates(this->x(), this->y());
     update();
 }
-
 
 void Field::setVariant(Field::VARIANT color)
 {

@@ -5,12 +5,11 @@
 
 class KingFigure: virtual public AbstractFigure
 {
-private:
-    bool beggining = true;
 public:
     explicit KingFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
+    bool thereIsNoOtherPieceOnField();
 };
 
 #endif // KINGFIGURE_H

@@ -28,18 +28,21 @@ public:
     void drawChessBoard(QGraphicsScene* scene);
     void createFigure(figureTypes type, figureColors color);
     void createFiguresAndAddPiecesToBoard(QGraphicsScene*);
-    void addPawnsToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
-    void addBishopsToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
-    void addKnightsToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
-    void addRooksToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
-    void addQueenToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
-    void addKingToBoard(QGraphicsScene*, AbstractFigureSharedVec&);
-    void connecter(AbstractFigure*);
+    void addPawnsToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
+    void addBishopsToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
+    void addKnightsToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
+    void addRooksToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
+    void addQueenToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
+    void addKingToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
+    void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
+    bool checkIfThereIsFewFiguresOnSameField(qreal col, qreal row);
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
     void changeMovableStateOfAllFigures(bool state);
+signals:
+    void fieldIsOccupied(bool occupied);
 };
 
 #endif // BOARD_H
