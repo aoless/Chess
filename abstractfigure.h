@@ -19,27 +19,28 @@ private:
     figureColors color;
     bool possible_to_click = true;
 protected:
-    std::pair<qreal, qreal> previousPosition;   //col, row
+    std::pair<int, int> previousPosition;   //col, row
     bool occupancy;
+    bool blockedByPiece;
 public:
     explicit AbstractFigure(QObject *parent = nullptr);
     void mousePressEvent(QGraphicsSceneMouseEvent*);
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
-    virtual bool thereIsNoOtherPieceOnField() = 0;
-    virtual bool isThereAnythingOnMyWay() = 0;
-    void changeStateOfPreviousPosition(qreal x, qreal y);
+    void changeStateOfPreviousPosition(int x, int y);
     bool isWhite();
     void setColor(figureColors c);
     void changePossibilityToClick(bool possibility);
     void fieldIsOccupied(bool occupied);
+    void thereIsSomethingOnTheWay(bool blocked);
 signals:
     void propagateInfoOfAbilityToMove(AbstractFigure* figure);
     void propagateInfoOfDisabilityToMove(AbstractFigure* figure);
     void unableToPickOtherFigures(bool state);
-    bool checkIfOtherFigureHasSamePosition(qreal col, qreal row);
+    void checkIfOtherFigureHasSamePosition(int col, int row);
+    void checkIfThereIsSomethingOnMyWay(int col, int row);
 public slots:
-    void setPosition(qreal col, qreal row);
+    void setPosition(int col, int row);
 };
 
 #endif // ABSTRACTFIGURE_H

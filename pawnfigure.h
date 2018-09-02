@@ -12,8 +12,7 @@ public:
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool isItBegginingOfGame();
-    bool thereIsNoOtherPieceOnField();
-    bool isThereAnythingOnMyWay();
+    bool thereIsOtherPieceOnField();
 };
 
 #endif // PAWNFIGURE_H

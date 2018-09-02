@@ -29,8 +29,7 @@ bool PawnFigure::moveIsValid()
     isWhite() ? offset = 100 : offset = -100;
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
-    thereIsNoOtherPieceOnField();
-    if (!occupancy)
+    if (!thereIsOtherPieceOnField())
     {
         qDebug() << "Free";
     }
@@ -41,9 +40,9 @@ bool PawnFigure::moveIsValid()
     }
 
     if (isItPossibleToBeat())
-        if (this->x() == previousPosition.first + offset ||
-                (this->x() == previousPosition.first - offset &&
-                 this->y() == previousPosition.second - offset))
+        if (int(this->x()) == previousPosition.first + offset ||
+                (int(this->x()) == previousPosition.first - offset &&
+                 int(this->y()) == previousPosition.second - offset))
         {
             beggining = false;
             return true;
@@ -53,9 +52,9 @@ bool PawnFigure::moveIsValid()
             qDebug() << "There is nothing to beat";
             return false;
         }
-    else if (this->x() == previousPosition.first &&
-              (this->y() == previousPosition.second - offset ||
-              (this->y() == previousPosition.second - offset - begginingOffset)))
+    else if (int(this->x()) == previousPosition.first &&
+              (int(this->y()) == previousPosition.second - offset ||
+              (int(this->y()) == previousPosition.second - offset - begginingOffset)))
         {
             beggining = false;
             return true;
@@ -76,12 +75,8 @@ bool PawnFigure::isItBegginingOfGame()
     return beggining;
 }
 
-bool PawnFigure::thereIsNoOtherPieceOnField()
+bool PawnFigure::thereIsOtherPieceOnField()
 {
     emit checkIfOtherFigureHasSamePosition(this->x(), this->y());
-}
-
-bool PawnFigure::isThereAnythingOnMyWay()
-{
-
+    return occupancy;
 }

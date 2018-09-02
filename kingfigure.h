@@ -10,7 +10,6 @@ public:
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool thereIsNoOtherPieceOnField();
-    bool isThereAnythingOnMyWay();
 };
 
 #endif // KINGFIGURE_H

@@ -26,7 +26,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
     }
 }
 
-void AbstractFigure::changeStateOfPreviousPosition(qreal x, qreal y)
+void AbstractFigure::changeStateOfPreviousPosition(int x, int y)
 {
     previousPosition.first = x;
     previousPosition.second = y;
@@ -52,7 +52,12 @@ void AbstractFigure::fieldIsOccupied(bool occupied)
     occupancy = occupied;
 }
 
-void AbstractFigure::setPosition(qreal col, qreal row)
+void AbstractFigure::thereIsSomethingOnTheWay(bool blocked)
+{
+    blockedByPiece = blocked;
+}
+
+void AbstractFigure::setPosition(int col, int row)
 {
     setPos(col, row);
 }

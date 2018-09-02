@@ -18,20 +18,15 @@ KingFigure::KingFigure(figureColors type)
 
 bool KingFigure::moveIsValid()
 {
-
+    return true;
 }
 
 bool KingFigure::isItPossibleToBeat()
 {
-
+    return false;
 }
 
 bool KingFigure::thereIsNoOtherPieceOnField()
 {
-
-}
-
-bool KingFigure::isThereAnythingOnMyWay()
-{
-
+    return true;
 }

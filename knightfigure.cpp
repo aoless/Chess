@@ -18,20 +18,15 @@ KnightFigure::KnightFigure(figureColors type)
 
 bool KnightFigure::moveIsValid()
 {
-
+    return true;
 }
 
 bool KnightFigure::isItPossibleToBeat()
 {
-
+    return false;
 }
 
 bool KnightFigure::thereIsNoOtherPieceOnField()
 {
-
-}
-
-bool KnightFigure::isThereAnythingOnMyWay()
-{
-
+    return true;
 }

@@ -18,20 +18,20 @@ QueenFigure::QueenFigure(figureColors type)
 
 bool QueenFigure::moveIsValid()
 {
-
+    return true;
 }
 
 bool QueenFigure::isItPossibleToBeat()
 {
-
+    return false;
 }
 
 bool QueenFigure::thereIsNoOtherPieceOnField()
 {
-
+    return true;
 }
 
 bool QueenFigure::isThereAnythingOnMyWay()
 {
-
+    return true;
 }

@@ -27,7 +27,7 @@ QGraphicsRectItem * Board::getSingleSquare(int col, int row)
     return fields[col][row]->drawSquare();
 }
 
-Field *Board::getField(int row, int col)
+Field *Board::getField(int col, int row)
 {
     return fields[col][row];
 }
@@ -122,8 +122,8 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
 
 void Board::addPawnsToBoard(QGraphicsScene* scene, const AbstractFigureSharedVec& pawns)
 {
-    qreal colNumber = 0;
-    qreal rowNumber;
+    int colNumber = 0;
+    int rowNumber;
 
     for (auto& pawn : pawns)
     {
@@ -219,7 +219,10 @@ void Board::connecter(const AbstractFigure* figure)
     connect(figure, AbstractFigure::unableToPickOtherFigures, this, Board::changeMovableStateOfAllFigures);
     connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition,
         this, Board::checkIfThereIsFewFiguresOnSameField);
+    connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay,
+        this, Board::checkIfThereIsFewFiguresOnSameField);
     connect(this, Board::fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
+    connect(this, Board::thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
@@ -278,13 +281,19 @@ void Board::changeMovableStateOfAllFigures(bool state)
 
 }
 
-void Board::checkIfThereIsFewFiguresOnSameField(qreal col, qreal row)
+void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
 {
     int counter = 0;
     for (const auto& piece : figures)
         for (const auto& p : piece.second)
-            if (p->x() == col && p->y() == row)
+            if (int(p->x()) == col && int(p->y()) == row)
                 counter++;
+
+    qDebug() << counter;
+    if(counter > 0)
+        emit thereIsSomethingOnTheWay(true);
+    else
+        emit thereIsSomethingOnTheWay(false);
 
     if (counter > 1)
         emit fieldIsOccupied(true);

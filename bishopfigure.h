@@ -9,7 +9,7 @@ public:
     explicit BishopFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
-    bool thereIsNoOtherPieceOnField();
+    bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
 
 signals:

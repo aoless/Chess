@@ -18,20 +18,20 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-
+    return true;
 }
 
 bool RookFigure::isItPossibleToBeat()
 {
-
+    return false;
 }
 
 bool RookFigure::thereIsNoOtherPieceOnField()
 {
-
+    return true;
 }
 
-bool RookFigure::isThereAnythingOnMyWay()
+void RookFigure::isThereAnythingOnMyWay()
 {
 
 }

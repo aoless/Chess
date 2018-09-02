@@ -24,7 +24,7 @@ public:
     Board();
     ~Board();
     QGraphicsRectItem *getSingleSquare(int row, int col);
-    Field *getField(int row, int col);
+    Field *getField(int col, int row);
     void drawChessBoard(QGraphicsScene* scene);
     void createFigure(figureTypes type, figureColors color);
     void createFiguresAndAddPiecesToBoard(QGraphicsScene*);
@@ -36,13 +36,14 @@ public:
     void addKingToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
-    void checkIfThereIsFewFiguresOnSameField(qreal col, qreal row);
+    void checkIfThereIsFewFiguresOnSameField(int col, int row);
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
     void changeMovableStateOfAllFigures(bool state);
 signals:
     void fieldIsOccupied(bool occupied);
+    void thereIsSomethingOnTheWay(bool blockedByPiece);
 };
 
 #endif // BOARD_H
