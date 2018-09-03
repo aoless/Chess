@@ -19,8 +19,8 @@ PawnFigure::PawnFigure(figureColors type)
 bool PawnFigure::moveIsValid()
 {
     //position does not change
-    if (this->x() == previousPosition.first &&
-            this->y() == previousPosition.second)
+    if (this->x() == int(previousPosition.first) &&
+            this->y() == int(previousPosition.second))
         return true;
 
     int offset;
@@ -29,15 +29,8 @@ bool PawnFigure::moveIsValid()
     isWhite() ? offset = 100 : offset = -100;
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
-    if (!thereIsOtherPieceOnField())
-    {
-        qDebug() << "Free";
-    }
-    else
-    {
-        qDebug() << "Occupied";
+    if (thereIsOtherPieceOnField())
         return false;
-    }
 
     if (isItPossibleToBeat())
         if (int(this->x()) == previousPosition.first + offset ||
@@ -77,6 +70,6 @@ bool PawnFigure::isItBegginingOfGame()
 
 bool PawnFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(this->x(), this->y());
+    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
     return occupancy;
 }

@@ -207,8 +207,8 @@ void Board::addKingToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec&
 void Board::setUpFigureOnScene(QGraphicsScene* scene, AbstractFigure* figure, std::pair<qreal, qreal> position)
 {
     scene->addItem(figure);
-    figure->setPosition(position.first, position.second);
-    figure->changeStateOfPreviousPosition(position.first, position.second);
+    figure->setPosition(int(position.first), int(position.second));
+    figure->changeStateOfPreviousPosition(int(position.first), int(position.second));
     connecter(figure);
 }
 
@@ -228,57 +228,22 @@ void Board::connecter(const AbstractFigure* figure)
 void Board::enableToMoveFigure(AbstractFigure* figure)
 {
     for (int i = 0; i < 8; i++)
-    {
         for (int j = 0; j < 8; j++)
-        {
             connect(fields[i][j], Field::sendCoordinates, figure, AbstractFigure::setPosition);
-        }
-    }
 }
 
 void Board::refuseToMoveFigure(AbstractFigure* figure)
 {
     for (int i = 0; i < 8; i++)
-    {
         for (int j = 0; j < 8; j++)
-        {
             disconnect(fields[i][j], Field::sendCoordinates, figure, AbstractFigure::setPosition);
-        }
-    }
 }
 
 void Board::changeMovableStateOfAllFigures(bool state)
 {
-    for (auto& f : figures["Pawn"])
-    {
-        f->changePossibilityToClick(state);
-    }
-
-    for (auto& f : figures["Bishop"])
-    {
-        f->changePossibilityToClick(state);
-    }
-
-    for (auto& f : figures["Knight"])
-    {
-        f->changePossibilityToClick(state);
-    }
-
-    for (auto& f : figures["Rook"])
-    {
-        f->changePossibilityToClick(state);
-    }
-
-    for (auto& f : figures["Queen"])
-    {
-        f->changePossibilityToClick(state);
-    }
-
-    for (auto& f : figures["King"])
-    {
-        f->changePossibilityToClick(state);
-    }
-
+    for (const auto& piece : figures)
+        for (const auto& p : piece.second)
+            p->changePossibilityToClick(state);
 }
 
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
@@ -290,13 +255,13 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
                 counter++;
 
     qDebug() << counter;
-    if(counter > 0)
-        emit thereIsSomethingOnTheWay(true);
-    else
-        emit thereIsSomethingOnTheWay(false);
-
     if (counter > 1)
         emit fieldIsOccupied(true);
     else
         emit fieldIsOccupied(false);
+
+    if(counter == 1)
+        emit thereIsSomethingOnTheWay(true);
+    else
+        emit thereIsSomethingOnTheWay(false);
 }

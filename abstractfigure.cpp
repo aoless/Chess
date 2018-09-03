@@ -16,7 +16,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
             setPosition(previousPosition.first, previousPosition.second);
         }
         emit unableToPickOtherFigures(true);
-        changeStateOfPreviousPosition(this->x(), this->y());
+        changeStateOfPreviousPosition(int(this->x()), int(this->y()));
     }
     else if (mode == unclicked && possible_to_click)
     {
