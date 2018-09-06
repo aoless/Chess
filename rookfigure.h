@@ -9,8 +9,8 @@ public:
     explicit RookFigure(figureColors color);
     bool moveIsValid();
     bool isItPossibleToBeat();
-    bool thereIsNoOtherPieceOnField();
-    void isThereAnythingOnMyWay();
+    bool thereIsOtherPieceOnField();
+    bool isThereAnythingOnMyWay();
 
 signals:
 

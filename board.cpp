@@ -254,7 +254,7 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
             if (int(p->x()) == col && int(p->y()) == row)
                 counter++;
 
-    qDebug() << counter;
+    // qDebug() << counter;
     if (counter > 1)
         emit fieldIsOccupied(true);
     else

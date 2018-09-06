@@ -9,7 +9,7 @@ public:
     explicit KingFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
-    bool thereIsNoOtherPieceOnField();
+    bool thereIsOtherPieceOnField();
 };
 
 #endif // KINGFIGURE_H

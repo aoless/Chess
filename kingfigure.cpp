@@ -18,6 +18,19 @@ KingFigure::KingFigure(figureColors type)
 
 bool KingFigure::moveIsValid()
 {
+    if (this->x() == int(previousPosition.first) &&
+            this->y() == int(previousPosition.second))
+        return true;
+
+    if (thereIsOtherPieceOnField())
+        return false;
+
+    bool goingToFarVerticaly = std::abs(previousPosition.second - int(this->y())) > 100;
+    bool goingToFarHorizontaly = std::abs(previousPosition.first - int(this->x())) > 100;
+
+    if (goingToFarVerticaly || goingToFarHorizontaly)
+        return false;
+
     return true;
 }
 
@@ -26,7 +39,8 @@ bool KingFigure::isItPossibleToBeat()
     return false;
 }
 
-bool KingFigure::thereIsNoOtherPieceOnField()
+bool KingFigure::thereIsOtherPieceOnField()
 {
-    return true;
+    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    return occupancy;
 }

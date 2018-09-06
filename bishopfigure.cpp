@@ -20,15 +20,11 @@ BishopFigure::BishopFigure(figureColors type)
 bool BishopFigure::moveIsValid()
 {
     // position does not change
-    if (int(this->x()) == previousPosition.first &&
-            int(this->y()) == previousPosition.second)
+    if (int(this->x()) == previousPosition.first && int(this->y()) == previousPosition.second)
         return true;
 
     if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
-    {
         return false;
-    }
-
 
     int rowOffset = int(std::abs(this->y() - previousPosition.second));
 
@@ -93,6 +89,5 @@ bool BishopFigure::isThereAnythingOnMyWay()
             return true;
         }
     }
-
     return false;
 }

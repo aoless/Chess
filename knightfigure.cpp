@@ -18,7 +18,23 @@ KnightFigure::KnightFigure(figureColors type)
 
 bool KnightFigure::moveIsValid()
 {
-    return true;
+    if (this->x() == int(previousPosition.first) && this->y() == int(previousPosition.second))
+        return true;
+
+    if (thereIsOtherPieceOnField())
+        return false;
+
+    int colJump = std::abs(previousPosition.second - int(this->y()));
+    int rowJump = std::abs(previousPosition.first - int(this->x()));
+
+    if (colJump == 100 && rowJump == 100)
+        return true;
+    else if (colJump == 100 && rowJump == 200)
+        return true;
+    else if (colJump == 200 && rowJump == 100)
+        return true;
+    else
+        return false;
 }
 
 bool KnightFigure::isItPossibleToBeat()
@@ -26,7 +42,8 @@ bool KnightFigure::isItPossibleToBeat()
     return false;
 }
 
-bool KnightFigure::thereIsNoOtherPieceOnField()
+bool KnightFigure::thereIsOtherPieceOnField()
 {
-    return true;
+    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    return occupancy;
 }

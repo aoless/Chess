@@ -9,7 +9,7 @@ public:
     explicit KnightFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
-    bool thereIsNoOtherPieceOnField();
+    bool thereIsOtherPieceOnField();
 };
 
 #endif // KNIGHTFIGURE_H

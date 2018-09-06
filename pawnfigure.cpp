@@ -19,8 +19,7 @@ PawnFigure::PawnFigure(figureColors type)
 bool PawnFigure::moveIsValid()
 {
     //position does not change
-    if (this->x() == int(previousPosition.first) &&
-            this->y() == int(previousPosition.second))
+    if (this->x() == int(previousPosition.first) && this->y() == int(previousPosition.second))
         return true;
 
     int offset;

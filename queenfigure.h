@@ -9,7 +9,7 @@ public:
     explicit QueenFigure(figureColors type);
     bool moveIsValid();
     bool isItPossibleToBeat();
-    bool thereIsNoOtherPieceOnField();
+    bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
 };
 #endif // QUEENFIGURE_H
