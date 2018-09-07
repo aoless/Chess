@@ -4,7 +4,6 @@
 #include <QGraphicsScene>
 #include <QRect>
 #include <array>
-#include <memory>
 #include <map>
 #include "field.h"
 #include "abstractfigure.h"
@@ -40,7 +39,7 @@ public:
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
-    void changeMovableStateOfAllFigures(bool state);
+    void disableFiguresPickUp(bool state, figureColors color);
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);

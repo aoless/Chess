@@ -4,7 +4,7 @@
 
 BishopFigure::BishopFigure(figureColors type)
 {
-    setColor(type);
+    color = type;
     this->setRect(0, 0, 100, 100);
 
     if (isWhite())
@@ -19,10 +19,6 @@ BishopFigure::BishopFigure(figureColors type)
 
 bool BishopFigure::moveIsValid()
 {
-    // position does not change
-    if (int(this->x()) == previousPosition.first && int(this->y()) == previousPosition.second)
-        return true;
-
     if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
         return false;
 
@@ -42,10 +38,6 @@ bool BishopFigure::isItPossibleToBeat()
 bool BishopFigure::thereIsOtherPieceOnField()
 {
     emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
-    if (occupancy)
-    {
-        qDebug() << "This field is occupied";
-    }
     return occupancy;
 }
 
@@ -81,13 +73,9 @@ bool BishopFigure::isThereAnythingOnMyWay()
     for (col = previousPosition.first, row = previousPosition.second; col != int(this->x()) && row != int(this->y());
          col += colOffset, row += rowOffset)
     {
-        qDebug() << "col: " << col << " row: " << row;
         emit checkIfThereIsSomethingOnMyWay(col, row);
         if (blockedByPiece)
-        {
-            qDebug() << "There is something on my way!";
             return true;
-        }
     }
     return false;
 }

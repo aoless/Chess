@@ -3,7 +3,7 @@
 
 RookFigure::RookFigure(figureColors type)
 {
-    setColor(type);
+    color = type;
     this->setRect(0, 0, 100, 100);
 
     if (isWhite())
@@ -18,10 +18,6 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-    // position does not change
-    if (int(this->x()) == previousPosition.first && int(this->y()) == previousPosition.second)
-        return true;
-
     if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
         return false;
 

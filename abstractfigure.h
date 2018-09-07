@@ -16,7 +16,6 @@ class AbstractFigure : public QObject, public QGraphicsRectItem
     Q_OBJECT
 private:
     MODE mode = unclicked;
-    figureColors color;
     bool possible_to_click = true;
 protected:
     std::pair<int, int> previousPosition;   //col, row
@@ -24,19 +23,19 @@ protected:
     bool blockedByPiece;
 public:
     explicit AbstractFigure(QObject *parent = nullptr);
+    figureColors color;
     void mousePressEvent(QGraphicsSceneMouseEvent*);
-    virtual bool moveIsValid() = 0;
-    virtual bool isItPossibleToBeat() = 0;
     void changeStateOfPreviousPosition(int x, int y);
-    bool isWhite();
-    void setColor(figureColors c);
     void changePossibilityToClick(bool possibility);
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blocked);
+    bool isWhite() { return color == figureColors::white; }
+    virtual bool moveIsValid() = 0;
+    virtual bool isItPossibleToBeat() = 0;
 signals:
     void propagateInfoOfAbilityToMove(AbstractFigure* figure);
     void propagateInfoOfDisabilityToMove(AbstractFigure* figure);
-    void unableToPickOtherFigures(bool state);
+    void disableFiguresPickUp(bool state, figureColors color);
     void checkIfOtherFigureHasSamePosition(int col, int row);
     void checkIfThereIsSomethingOnMyWay(int col, int row);
 public slots:

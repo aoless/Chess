@@ -3,7 +3,7 @@
 
 KingFigure::KingFigure(figureColors type)
 {
-    setColor(type);
+    color = type;
     this->setRect(0, 0, 100, 100);
 
     if (isWhite())
@@ -18,10 +18,6 @@ KingFigure::KingFigure(figureColors type)
 
 bool KingFigure::moveIsValid()
 {
-    if (this->x() == int(previousPosition.first) &&
-            this->y() == int(previousPosition.second))
-        return true;
-
     if (thereIsOtherPieceOnField())
         return false;
 

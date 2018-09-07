@@ -3,7 +3,7 @@
 
 PawnFigure::PawnFigure(figureColors type)
 {
-    setColor(type);
+    color = type;
     this->setRect(0, 0, 100, 100);
 
     if (isWhite())
@@ -18,10 +18,6 @@ PawnFigure::PawnFigure(figureColors type)
 
 bool PawnFigure::moveIsValid()
 {
-    //position does not change
-    if (this->x() == int(previousPosition.first) && this->y() == int(previousPosition.second))
-        return true;
-
     int offset;
     int begginingOffset = 0;
 

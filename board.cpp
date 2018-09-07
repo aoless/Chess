@@ -216,13 +216,13 @@ void Board::connecter(const AbstractFigure* figure)
 {
     connect(figure, AbstractFigure::propagateInfoOfAbilityToMove, this, Board::enableToMoveFigure);
     connect(figure, AbstractFigure::propagateInfoOfDisabilityToMove, this, Board::refuseToMoveFigure);
-    connect(figure, AbstractFigure::unableToPickOtherFigures, this, Board::changeMovableStateOfAllFigures);
+    connect(figure, AbstractFigure::disableFiguresPickUp, this, Board::disableFiguresPickUp);
+    connect(this, Board::fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
+    connect(this, Board::thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
     connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition,
         this, Board::checkIfThereIsFewFiguresOnSameField);
     connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay,
         this, Board::checkIfThereIsFewFiguresOnSameField);
-    connect(this, Board::fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
-    connect(this, Board::thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
@@ -239,11 +239,14 @@ void Board::refuseToMoveFigure(AbstractFigure* figure)
             disconnect(fields[i][j], Field::sendCoordinates, figure, AbstractFigure::setPosition);
 }
 
-void Board::changeMovableStateOfAllFigures(bool state)
+void Board::disableFiguresPickUp(bool state, figureColors color)
 {
     for (const auto& piece : figures)
         for (const auto& p : piece.second)
-            p->changePossibilityToClick(state);
+            if (p->color == color)
+                p->changePossibilityToClick(state);
+            else
+                p->changePossibilityToClick(!state);
 }
 
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
@@ -254,7 +257,6 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
             if (int(p->x()) == col && int(p->y()) == row)
                 counter++;
 
-    // qDebug() << counter;
     if (counter > 1)
         emit fieldIsOccupied(true);
     else

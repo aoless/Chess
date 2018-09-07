@@ -3,7 +3,7 @@
 
 QueenFigure::QueenFigure(figureColors type)
 {
-    setColor(type);
+    color = type;
     this->setRect(0, 0, 100, 100);
 
     if (isWhite())
@@ -18,10 +18,6 @@ QueenFigure::QueenFigure(figureColors type)
 
 bool QueenFigure::moveIsValid()
 {
-    // position does not change
-    if (int(this->x()) == previousPosition.first && int(this->y()) == previousPosition.second)
-        return true;
-
     if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
         return false;
 
@@ -87,10 +83,7 @@ bool QueenFigure::isThereAnythingOnMyWay()
     {
         emit checkIfThereIsSomethingOnMyWay(col, row);
         if (blockedByPiece)
-        {
-            qDebug() << "There is something on my way!";
             return true;
-        }
     }
     return false;
 }
