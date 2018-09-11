@@ -12,10 +12,9 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
         emit propagateInfoOfDisabilityToMove(this);
         mode = unclicked;
         if (!moveIsValid())
-        {
             setPosition(previousPosition.first, previousPosition.second);
-        }
-        if (previousPosition.first != int(this->x()) || previousPosition.second != int(this->y()))
+
+        if (previousPosition.first != int(x()) || previousPosition.second != int(y()))
         {
             if (color == figureColors::white)
                 emit disableFiguresPickUp(false, figureColors::white);
@@ -23,7 +22,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
                 emit disableFiguresPickUp(false, figureColors::black);
         }
 
-        changeStateOfPreviousPosition(int(this->x()), int(this->y()));
+        changeStateOfPreviousPosition(int(x()), int(y()));
 
     }
     else if (mode == unclicked && possible_to_click)
@@ -51,7 +50,7 @@ void AbstractFigure::fieldIsOccupied(bool occupied)
 
 void AbstractFigure::thereIsSomethingOnTheWay(bool blocked)
 {
-    blockedByPiece = blocked;
+    blocked_by_piece = blocked;
 }
 
 void AbstractFigure::setPosition(int col, int row)

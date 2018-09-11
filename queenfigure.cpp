@@ -4,16 +4,12 @@
 QueenFigure::QueenFigure(figureColors type)
 {
     color = type;
-    this->setRect(0, 0, 100, 100);
+    setRect(0, 0, 100, 100);
 
     if (isWhite())
-    {
-        this->setBrush(QPixmap(":/figures images/queen_white.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/queen_white.png").scaledToHeight(100).scaledToWidth(100));
     else
-    {
-        this->setBrush(QPixmap(":/figures images/queen_black.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/queen_black.png").scaledToHeight(100).scaledToWidth(100));
 }
 
 bool QueenFigure::moveIsValid()
@@ -31,7 +27,7 @@ bool QueenFigure::isItPossibleToBeat()
 
 bool QueenFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
     return occupancy;
 }
 
@@ -40,10 +36,10 @@ bool QueenFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - int(this->y()) > 0;
-    bool goingDown = previousPosition.second - int(this->y()) < 0;
-    bool goingRight = previousPosition.first - int(this->x()) < 0;
-    bool goingLeft = previousPosition.first - int(this->x()) > 0;
+    bool goingUp = previousPosition.second - int(y()) > 0;
+    bool goingDown = previousPosition.second - int(y()) < 0;
+    bool goingRight = previousPosition.first - int(x()) < 0;
+    bool goingLeft = previousPosition.first - int(x()) > 0;
 
     if (goingUp && goingRight)
     {
@@ -78,11 +74,11 @@ bool QueenFigure::isThereAnythingOnMyWay()
         colOffset = -100; rowOffset = 0;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != int(this->x()) || row != int(this->y());
+    for (col = previousPosition.first, row = previousPosition.second; col != int(x()) || row != int(y());
          col += colOffset, row += rowOffset)
     {
-        emit checkIfThereIsSomethingOnMyWay(col, row);
-        if (blockedByPiece)
+        emit checkIfThereIsSomethingOnMyWay(col, row, color);
+        if (blocked_by_piece)
             return true;
     }
     return false;

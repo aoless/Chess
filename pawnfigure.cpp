@@ -4,16 +4,15 @@
 PawnFigure::PawnFigure(figureColors type)
 {
     color = type;
-    this->setRect(0, 0, 100, 100);
+    setRect(0, 0, 100, 100);
 
     if (isWhite())
     {
-        this->setBrush(QPixmap(":/figures images/pawn_white.png").scaledToHeight(100).scaledToWidth(100));
+        setBrush(QPixmap(":/figures images/pawn_white.png").scaledToHeight(100).scaledToWidth(100));
+        changePossibilityToClick(true);
     }
     else
-    {
-        this->setBrush(QPixmap(":/figures images/pawn_black.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/pawn_black.png").scaledToHeight(100).scaledToWidth(100));
 }
 
 bool PawnFigure::moveIsValid()
@@ -28,9 +27,9 @@ bool PawnFigure::moveIsValid()
         return false;
 
     if (isItPossibleToBeat())
-        if (int(this->x()) == previousPosition.first + offset ||
-                (int(this->x()) == previousPosition.first - offset &&
-                 int(this->y()) == previousPosition.second - offset))
+        if (int(x()) == previousPosition.first + offset ||
+                (int(x()) == previousPosition.first - offset &&
+                 int(y()) == previousPosition.second - offset))
         {
             beggining = false;
             return true;
@@ -40,9 +39,9 @@ bool PawnFigure::moveIsValid()
             qDebug() << "There is nothing to beat";
             return false;
         }
-    else if (int(this->x()) == previousPosition.first &&
-              (int(this->y()) == previousPosition.second - offset ||
-              (int(this->y()) == previousPosition.second - offset - begginingOffset)))
+    else if (int(x()) == previousPosition.first &&
+              (int(y()) == previousPosition.second - offset ||
+              (int(y()) == previousPosition.second - offset - begginingOffset)))
         {
             beggining = false;
             return true;
@@ -53,8 +52,6 @@ bool PawnFigure::moveIsValid()
 
 bool PawnFigure::isItPossibleToBeat()
 {
-    // is there a figure on that field?
-    // send field checker
     return false;
 }
 
@@ -65,6 +62,6 @@ bool PawnFigure::isItBegginingOfGame()
 
 bool PawnFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
     return occupancy;
 }

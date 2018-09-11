@@ -249,13 +249,28 @@ void Board::disableFiguresPickUp(bool state, figureColors color)
                 p->changePossibilityToClick(!state);
 }
 
-void Board::checkIfThereIsFewFiguresOnSameField(int col, int row)
+void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)
 {
     int counter = 0;
-    for (const auto& piece : figures)
-        for (const auto& p : piece.second)
+    for (auto& piece : figures)
+        for (auto& p : piece.second)
+        {
             if (int(p->x()) == col && int(p->y()) == row)
+            {
+                if (p->color != color)
+                {
+                    std::vector<std::unique_ptr<AbstractFigure>>::iterator object =
+                        std::find_if(piece.second.begin(), piece.second.end(),
+                            [&](std::unique_ptr<AbstractFigure>& obj){ return int(obj->x()) == col && int(obj->y()) == row; });
+                    piece.second.erase(std::remove(piece.second.begin(), piece.second.end(), *object));
+
+                    emit fieldIsOccupied(false);
+                    return;
+                }
                 counter++;
+            }
+
+        }
 
     if (counter > 1)
         emit fieldIsOccupied(true);

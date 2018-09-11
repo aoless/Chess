@@ -5,16 +5,12 @@
 BishopFigure::BishopFigure(figureColors type)
 {
     color = type;
-    this->setRect(0, 0, 100, 100);
+    setRect(0, 0, 100, 100);
 
     if (isWhite())
-    {
-        this->setBrush(QPixmap(":/figures images/bishop_white.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/bishop_white.png").scaledToHeight(100).scaledToWidth(100));
     else
-    {
-       this->setBrush(QPixmap(":/figures images/bishop_black.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/bishop_black.png").scaledToHeight(100).scaledToWidth(100));
 }
 
 bool BishopFigure::moveIsValid()
@@ -22,9 +18,9 @@ bool BishopFigure::moveIsValid()
     if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
         return false;
 
-    int rowOffset = int(std::abs(this->y() - previousPosition.second));
+    int rowOffset = int(std::abs(y() - previousPosition.second));
 
-    if (rowOffset == int(std::abs(this->x() - previousPosition.first)))
+    if (rowOffset == int(std::abs(x() - previousPosition.first)))
         return true;
 
     return false;
@@ -37,7 +33,7 @@ bool BishopFigure::isItPossibleToBeat()
 
 bool BishopFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
     return occupancy;
 }
 
@@ -46,8 +42,8 @@ bool BishopFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - int(this->y()) > 0;
-    bool goingRight = previousPosition.first - int(this->x()) < 0;
+    bool goingUp = previousPosition.second - int(y()) > 0;
+    bool goingRight = previousPosition.first - int(x()) < 0;
 
     if (goingUp && goingRight)
     {
@@ -70,11 +66,11 @@ bool BishopFigure::isThereAnythingOnMyWay()
         rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != int(this->x()) && row != int(this->y());
+    for (col = previousPosition.first, row = previousPosition.second; col != int(x()) && row != int(y());
          col += colOffset, row += rowOffset)
     {
-        emit checkIfThereIsSomethingOnMyWay(col, row);
-        if (blockedByPiece)
+        emit checkIfThereIsSomethingOnMyWay(col, row, color);
+        if (blocked_by_piece)
             return true;
     }
     return false;

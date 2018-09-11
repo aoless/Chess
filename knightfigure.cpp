@@ -4,12 +4,15 @@
 KnightFigure::KnightFigure(figureColors type)
 {
     color = type;
-    this->setRect(0, 0, 100, 100);
+    setRect(0, 0, 100, 100);
 
     if (isWhite())
-        this->setBrush(QPixmap(":/figures images/knight_white.png").scaledToHeight(100).scaledToWidth(100));
+    {
+        setBrush(QPixmap(":/figures images/knight_white.png").scaledToHeight(100).scaledToWidth(100));
+        changePossibilityToClick(true);
+    }
     else
-        this->setBrush(QPixmap(":/figures images/knight_black.png").scaledToHeight(100).scaledToWidth(100));
+        setBrush(QPixmap(":/figures images/knight_black.png").scaledToHeight(100).scaledToWidth(100));
 }
 
 bool KnightFigure::moveIsValid()
@@ -17,8 +20,8 @@ bool KnightFigure::moveIsValid()
     if (thereIsOtherPieceOnField())
         return false;
 
-    int colJump = std::abs(previousPosition.second - int(this->y()));
-    int rowJump = std::abs(previousPosition.first - int(this->x()));
+    int colJump = std::abs(previousPosition.second - int(y()));
+    int rowJump = std::abs(previousPosition.first - int(x()));
 
     if (colJump == 100 && rowJump == 200)
         return true;
@@ -35,6 +38,6 @@ bool KnightFigure::isItPossibleToBeat()
 
 bool KnightFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
     return occupancy;
 }

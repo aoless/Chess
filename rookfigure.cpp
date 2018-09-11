@@ -4,16 +4,12 @@
 RookFigure::RookFigure(figureColors type)
 {
     color = type;
-    this->setRect(0, 0, 100, 100);
+    setRect(0, 0, 100, 100);
 
     if (isWhite())
-    {
-        this->setBrush(QPixmap(":/figures images/rook_white.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/rook_white.png").scaledToHeight(100).scaledToWidth(100));
     else
-    {
-        this->setBrush(QPixmap(":/figures images/rook_black.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/rook_black.png").scaledToHeight(100).scaledToWidth(100));
 }
 
 bool RookFigure::moveIsValid()
@@ -21,8 +17,8 @@ bool RookFigure::moveIsValid()
     if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
         return false;
 
-    int rowOffset = int(std::abs(this->y() - previousPosition.second));
-    int colOffset = int(std::abs(this->x() - previousPosition.first));
+    int rowOffset = int(std::abs(y() - previousPosition.second));
+    int colOffset = int(std::abs(x() - previousPosition.first));
 
     if ((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0))
         return true;
@@ -37,11 +33,7 @@ bool RookFigure::isItPossibleToBeat()
 
 bool RookFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
-    if (occupancy)
-    {
-        qDebug() << "This field is occupied";
-    }
+    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
     return occupancy;
 }
 
@@ -50,8 +42,8 @@ bool RookFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - int(this->y()) > 0;
-    bool goingRight = previousPosition.first - int(this->x()) < 0;
+    bool goingUp = previousPosition.second - int(y()) > 0;
+    bool goingRight = previousPosition.first - int(x()) < 0;
 
     if (goingUp)
     {
@@ -74,11 +66,11 @@ bool RookFigure::isThereAnythingOnMyWay()
         rowOffset = 0;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != int(this->x()) || row != int(this->y());
+    for (col = previousPosition.first, row = previousPosition.second; col != int(x()) || row != int(y());
          col += colOffset, row += rowOffset)
     {
-        emit checkIfThereIsSomethingOnMyWay(col, row);
-        if (blockedByPiece)
+        emit checkIfThereIsSomethingOnMyWay(col, row, color);
+        if (blocked_by_piece)
         {
             qDebug() << "There is something on my way!";
             return true;

@@ -8,17 +8,11 @@ Field::Field(int row_, int col_)
     position = std::make_pair(row_, col_);
     setRect(0, 0, 100, 100);
     if (position.first % 2 == 0 && position.second % 2 != 0)
-    {
         setVariant(black);
-    }
     else if (position.first % 2 != 0 && position.second % 2 == 0)
-    {
         setVariant(black);
-    }
     else
-    {
         setVariant(white);
-    }
 
     setAcceptHoverEvents(true);
 }

@@ -4,16 +4,12 @@
 KingFigure::KingFigure(figureColors type)
 {
     color = type;
-    this->setRect(0, 0, 100, 100);
+    setRect(0, 0, 100, 100);
 
     if (isWhite())
-    {
-        this->setBrush(QPixmap(":/figures images/king_white.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/king_white.png").scaledToHeight(100).scaledToWidth(100));
     else
-    {
-        this->setBrush(QPixmap(":/figures images/king_black.png").scaledToHeight(100).scaledToWidth(100));
-    }
+        setBrush(QPixmap(":/figures images/king_black.png").scaledToHeight(100).scaledToWidth(100));
 }
 
 bool KingFigure::moveIsValid()
@@ -21,8 +17,8 @@ bool KingFigure::moveIsValid()
     if (thereIsOtherPieceOnField())
         return false;
 
-    bool goingToFarVerticaly = std::abs(previousPosition.second - int(this->y())) > 100;
-    bool goingToFarHorizontaly = std::abs(previousPosition.first - int(this->x())) > 100;
+    bool goingToFarVerticaly = std::abs(previousPosition.second - int(y())) > 100;
+    bool goingToFarHorizontaly = std::abs(previousPosition.first - int(x())) > 100;
 
     if (goingToFarVerticaly || goingToFarHorizontaly)
         return false;
@@ -37,6 +33,6 @@ bool KingFigure::isItPossibleToBeat()
 
 bool KingFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(this->x()), int(this->y()));
+    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
     return occupancy;
 }

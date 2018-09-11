@@ -8,7 +8,7 @@
 #include "field.h"
 #include "abstractfigure.h"
 
-using AbstractFigureSharedVec = std::vector<std::shared_ptr<AbstractFigure>>;
+using AbstractFigureSharedVec = std::vector<std::unique_ptr<AbstractFigure>>;
 using squareMatrix = std::array<std::array<Field*, 8>, 8>;
 
 enum figureTypes { pawn, knight, bishop, rook, queen, king };
@@ -35,7 +35,7 @@ public:
     void addKingToBoard(QGraphicsScene*, const AbstractFigureSharedVec&);
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
-    void checkIfThereIsFewFiguresOnSameField(int col, int row);
+    void checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color);
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
@@ -43,6 +43,7 @@ public slots:
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);
+    void possibleToBeat(bool possibility);
 };
 
 #endif // BOARD_H
