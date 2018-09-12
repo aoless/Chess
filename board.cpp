@@ -120,7 +120,7 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
     addKingToBoard(scene, figures["King"]);
 }
 
-void Board::addPawnsToBoard(QGraphicsScene* scene, const AbstractFigureSharedVec& pawns)
+void Board::addPawnsToBoard(QGraphicsScene* scene, const AbstractFigureUniqueVec& pawns)
 {
     int colNumber = 0;
     int rowNumber;
@@ -135,7 +135,7 @@ void Board::addPawnsToBoard(QGraphicsScene* scene, const AbstractFigureSharedVec
     }
 }
 
-void Board::addBishopsToBoard(QGraphicsScene* scene, const AbstractFigureSharedVec& bishops)
+void Board::addBishopsToBoard(QGraphicsScene* scene, const AbstractFigureUniqueVec& bishops)
 {
     qreal colNumber = 200;
     qreal rowNumber;
@@ -150,7 +150,7 @@ void Board::addBishopsToBoard(QGraphicsScene* scene, const AbstractFigureSharedV
     }
 }
 
-void Board::addKnightsToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& knights)
+void Board::addKnightsToBoard(QGraphicsScene *scene, const AbstractFigureUniqueVec& knights)
 {
     qreal colNumber = 100;
     qreal rowNumber;
@@ -165,7 +165,7 @@ void Board::addKnightsToBoard(QGraphicsScene *scene, const AbstractFigureSharedV
     }
 }
 
-void Board::addRooksToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& rooks)
+void Board::addRooksToBoard(QGraphicsScene *scene, const AbstractFigureUniqueVec& rooks)
 {
     qreal colNumber = 0;
     qreal rowNumber;
@@ -180,7 +180,7 @@ void Board::addRooksToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec
     }
 }
 
-void Board::addQueenToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& queens)
+void Board::addQueenToBoard(QGraphicsScene *scene, const AbstractFigureUniqueVec& queens)
 {
     qreal colNumber = 300;
     qreal rowNumber;
@@ -192,7 +192,7 @@ void Board::addQueenToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec
     }
 }
 
-void Board::addKingToBoard(QGraphicsScene *scene, const AbstractFigureSharedVec& kings)
+void Board::addKingToBoard(QGraphicsScene *scene, const AbstractFigureUniqueVec& kings)
 {
     qreal colNumber = 400;
     qreal rowNumber;
@@ -254,23 +254,16 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
     int counter = 0;
     for (auto& piece : figures)
         for (auto& p : piece.second)
-        {
-            if (int(p->x()) == col && int(p->y()) == row)
+            if (p->horizontalPos() == col && p->verticalPos() == row)
             {
                 if (p->color != color)
                 {
-                    std::vector<std::unique_ptr<AbstractFigure>>::iterator object =
-                        std::find_if(piece.second.begin(), piece.second.end(),
-                            [&](std::unique_ptr<AbstractFigure>& obj){ return int(obj->x()) == col && int(obj->y()) == row; });
-                    piece.second.erase(std::remove(piece.second.begin(), piece.second.end(), *object));
-
+                    removePiece(col, row, piece.second);
                     emit fieldIsOccupied(false);
                     return;
                 }
                 counter++;
             }
-
-        }
 
     if (counter > 1)
         emit fieldIsOccupied(true);
@@ -281,4 +274,12 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
         emit thereIsSomethingOnTheWay(true);
     else
         emit thereIsSomethingOnTheWay(false);
+}
+
+void Board::removePiece(int col, int row, AbstractFigureUniqueVec& vec)
+{
+    auto object = std::find_if(vec.begin(), vec.end(),
+        [&](std::unique_ptr<AbstractFigure>& obj){ return obj->horizontalPos() == col && obj->verticalPos() == row; });
+
+    vec.erase(std::remove(vec.begin(), vec.end(), *object));
 }

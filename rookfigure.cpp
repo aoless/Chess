@@ -33,7 +33,7 @@ bool RookFigure::isItPossibleToBeat()
 
 bool RookFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
     return occupancy;
 }
 
@@ -42,8 +42,8 @@ bool RookFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - int(y()) > 0;
-    bool goingRight = previousPosition.first - int(x()) < 0;
+    bool goingUp = previousPosition.second - verticalPos() > 0;
+    bool goingRight = previousPosition.first - horizontalPos() < 0;
 
     if (goingUp)
     {
@@ -66,7 +66,7 @@ bool RookFigure::isThereAnythingOnMyWay()
         rowOffset = 0;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != int(x()) || row != int(y());
+    for (col = previousPosition.first, row = previousPosition.second; col != horizontalPos() || row != verticalPos();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);

@@ -14,7 +14,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
         if (!moveIsValid())
             setPosition(previousPosition.first, previousPosition.second);
 
-        if (previousPosition.first != int(x()) || previousPosition.second != int(y()))
+        if (previousPosition.first != horizontalPos() || previousPosition.second != verticalPos())
         {
             if (color == figureColors::white)
                 emit disableFiguresPickUp(false, figureColors::white);
@@ -22,20 +22,21 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
                 emit disableFiguresPickUp(false, figureColors::black);
         }
 
-        changeStateOfPreviousPosition(int(x()), int(y()));
+        changeStateOfPreviousPosition(horizontalPos(), verticalPos());
 
     }
     else if (mode == unclicked && possible_to_click)
     {
         emit propagateInfoOfAbilityToMove(this);
+        // you must disable picking other figures
         mode = clicked;
     }
 }
 
-void AbstractFigure::changeStateOfPreviousPosition(int x, int y)
+void AbstractFigure::changeStateOfPreviousPosition(int col, int row)
 {
-    previousPosition.first = x;
-    previousPosition.second = y;
+    previousPosition.first = col;
+    previousPosition.second = row;
 }
 
 void AbstractFigure::changePossibilityToClick(bool possibility)

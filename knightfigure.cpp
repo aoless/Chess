@@ -20,8 +20,8 @@ bool KnightFigure::moveIsValid()
     if (thereIsOtherPieceOnField())
         return false;
 
-    int colJump = std::abs(previousPosition.second - int(y()));
-    int rowJump = std::abs(previousPosition.first - int(x()));
+    int colJump = std::abs(previousPosition.second - verticalPos());
+    int rowJump = std::abs(previousPosition.first - horizontalPos());
 
     if (colJump == 100 && rowJump == 200)
         return true;
@@ -38,6 +38,6 @@ bool KnightFigure::isItPossibleToBeat()
 
 bool KnightFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
     return occupancy;
 }

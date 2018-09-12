@@ -33,7 +33,7 @@ bool BishopFigure::isItPossibleToBeat()
 
 bool BishopFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), horizontalPos(), color);
     return occupancy;
 }
 
@@ -42,8 +42,8 @@ bool BishopFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - int(y()) > 0;
-    bool goingRight = previousPosition.first - int(x()) < 0;
+    bool goingUp = previousPosition.second - horizontalPos() > 0;
+    bool goingRight = previousPosition.first - horizontalPos() < 0;
 
     if (goingUp && goingRight)
     {
@@ -66,7 +66,7 @@ bool BishopFigure::isThereAnythingOnMyWay()
         rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != int(x()) && row != int(y());
+    for (col = previousPosition.first, row = previousPosition.second; col != horizontalPos() && row != horizontalPos();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);

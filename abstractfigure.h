@@ -31,6 +31,8 @@ public:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blocked);
     bool isWhite() { return color == figureColors::white; }
+    int horizontalPos() { return int(x()); }
+    int verticalPos() { return int(y()); }
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
 signals:

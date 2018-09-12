@@ -27,7 +27,7 @@ bool QueenFigure::isItPossibleToBeat()
 
 bool QueenFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
     return occupancy;
 }
 
@@ -36,10 +36,10 @@ bool QueenFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - int(y()) > 0;
-    bool goingDown = previousPosition.second - int(y()) < 0;
-    bool goingRight = previousPosition.first - int(x()) < 0;
-    bool goingLeft = previousPosition.first - int(x()) > 0;
+    bool goingUp = previousPosition.second - verticalPos() > 0;
+    bool goingDown = previousPosition.second - verticalPos() < 0;
+    bool goingRight = previousPosition.first - horizontalPos() < 0;
+    bool goingLeft = previousPosition.first - horizontalPos() > 0;
 
     if (goingUp && goingRight)
     {
@@ -74,7 +74,7 @@ bool QueenFigure::isThereAnythingOnMyWay()
         colOffset = -100; rowOffset = 0;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != int(x()) || row != int(y());
+    for (col = previousPosition.first, row = previousPosition.second; col != horizontalPos() || row != verticalPos();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);

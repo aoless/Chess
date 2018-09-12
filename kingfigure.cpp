@@ -17,8 +17,8 @@ bool KingFigure::moveIsValid()
     if (thereIsOtherPieceOnField())
         return false;
 
-    bool goingToFarVerticaly = std::abs(previousPosition.second - int(y())) > 100;
-    bool goingToFarHorizontaly = std::abs(previousPosition.first - int(x())) > 100;
+    bool goingToFarVerticaly = std::abs(previousPosition.second - verticalPos()) > 100;
+    bool goingToFarHorizontaly = std::abs(previousPosition.first - horizontalPos()) > 100;
 
     if (goingToFarVerticaly || goingToFarHorizontaly)
         return false;
@@ -33,6 +33,6 @@ bool KingFigure::isItPossibleToBeat()
 
 bool KingFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
     return occupancy;
 }

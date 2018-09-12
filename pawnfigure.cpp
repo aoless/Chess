@@ -20,32 +20,23 @@ bool PawnFigure::moveIsValid()
     int offset;
     int begginingOffset = 0;
 
+    qDebug() << "Check if move is valid!";
+
     isWhite() ? offset = 100 : offset = -100;
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
     if (thereIsOtherPieceOnField())
+    {
+        qDebug() << "there is other piece";
         return false;
+    }
 
-    if (isItPossibleToBeat())
-        if (int(x()) == previousPosition.first + offset ||
-                (int(x()) == previousPosition.first - offset &&
-                 int(y()) == previousPosition.second - offset))
-        {
-            beggining = false;
-            return true;
-        }
-        else
-        {
-            qDebug() << "There is nothing to beat";
-            return false;
-        }
-    else if (int(x()) == previousPosition.first &&
-              (int(y()) == previousPosition.second - offset ||
-              (int(y()) == previousPosition.second - offset - begginingOffset)))
-        {
-            beggining = false;
-            return true;
-        }
+    if (horizontalPos() == previousPosition.first && (verticalPos() == previousPosition.second - offset ||
+       (verticalPos() == previousPosition.second - offset - begginingOffset)))
+    {
+        beggining = false;
+        return true;
+    }
 
     return false;
 }
@@ -62,6 +53,6 @@ bool PawnFigure::isItBegginingOfGame()
 
 bool PawnFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(int(x()), int(y()), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
     return occupancy;
 }
