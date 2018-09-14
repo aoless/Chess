@@ -1,6 +1,7 @@
 #include "board.h"
 #include "mainwindow.h"
 #include <QDebug>
+#include <QString>
 #include "pawnfigure.h"
 #include "bishopfigure.h"
 #include "knightfigure.h"
@@ -217,12 +218,12 @@ void Board::connecter(const AbstractFigure* figure)
     connect(figure, AbstractFigure::propagateInfoOfAbilityToMove, this, Board::enableToMoveFigure);
     connect(figure, AbstractFigure::propagateInfoOfDisabilityToMove, this, Board::refuseToMoveFigure);
     connect(figure, AbstractFigure::disableFiguresPickUp, this, Board::disableFiguresPickUp);
+    connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition, this, Board::checkIfThereIsFewFiguresOnSameField);
+    connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay, this, Board::checkIfThereIsFewFiguresOnSameField);
+    connect(figure, AbstractFigure::beatFigure, this, Board::removePiece);
     connect(this, Board::fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
     connect(this, Board::thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
-    connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition,
-        this, Board::checkIfThereIsFewFiguresOnSameField);
-    connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay,
-        this, Board::checkIfThereIsFewFiguresOnSameField);
+    connect(this, Board::canBeat, figure, AbstractFigure::canBeat);
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
@@ -253,17 +254,18 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
 {
     int counter = 0;
     for (auto& piece : figures)
+    {
         for (auto& p : piece.second)
+        {
             if (p->horizontalPos() == col && p->verticalPos() == row)
             {
-                if (p->color != color)
-                {
-                    removePiece(col, row, piece.second);
-                    emit fieldIsOccupied(false);
-                    return;
-                }
                 counter++;
+                if (p->color != color && piece.first != "King")
+                    emit canBeat(true);
             }
+        }
+    }
+
 
     if (counter > 1)
         emit fieldIsOccupied(true);
@@ -274,12 +276,24 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
         emit thereIsSomethingOnTheWay(true);
     else
         emit thereIsSomethingOnTheWay(false);
+
 }
 
-void Board::removePiece(int col, int row, AbstractFigureUniqueVec& vec)
+void Board::removePiece(int col, int row, figureColors color)
 {
-    auto object = std::find_if(vec.begin(), vec.end(),
-        [&](std::unique_ptr<AbstractFigure>& obj){ return obj->horizontalPos() == col && obj->verticalPos() == row; });
+    for (auto& piece : figures)
+    {
+        auto& vec = piece.second;
 
-    vec.erase(std::remove(vec.begin(), vec.end(), *object));
+        auto object = std::find_if(vec.begin(), vec.end(), [&](std::unique_ptr<AbstractFigure>& obj){
+            return (obj->horizontalPos() == col && obj->verticalPos() == row && obj->color != color); });
+
+        if (object == vec.end())
+            continue;
+        else
+        {
+            vec.erase(std::remove(vec.begin(), vec.end(), *object));
+            break;
+        }
+    }
 }

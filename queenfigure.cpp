@@ -14,8 +14,11 @@ QueenFigure::QueenFigure(figureColors type)
 
 bool QueenFigure::moveIsValid()
 {
-    if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !possible_to_beat)
         return false;
+
+    if (possible_to_beat)
+        emit beatFigure(horizontalPos(), verticalPos(), color);
 
     return true;
 }

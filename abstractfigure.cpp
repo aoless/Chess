@@ -22,13 +22,15 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
                 emit disableFiguresPickUp(false, figureColors::black);
         }
 
+        setZValue(0);
+        possible_to_beat = false;
         changeStateOfPreviousPosition(horizontalPos(), verticalPos());
 
     }
     else if (mode == unclicked && possible_to_click)
     {
+        setZValue(1);
         emit propagateInfoOfAbilityToMove(this);
-        // you must disable picking other figures
         mode = clicked;
     }
 }
@@ -57,4 +59,9 @@ void AbstractFigure::thereIsSomethingOnTheWay(bool blocked)
 void AbstractFigure::setPosition(int col, int row)
 {
     setPos(col, row);
+}
+
+void AbstractFigure::canBeat(bool beat)
+{
+    possible_to_beat = beat;
 }

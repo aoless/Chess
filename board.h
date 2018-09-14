@@ -36,7 +36,7 @@ public:
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
     void checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color);
-    void removePiece(int col, int row, AbstractFigureUniqueVec& vec);
+    void removePiece(int col, int row, figureColors color);
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
@@ -44,7 +44,7 @@ public slots:
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);
-    void possibleToBeat(bool possibility);
+    void canBeat(bool possibility);
 };
 
 #endif // BOARD_H

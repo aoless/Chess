@@ -14,11 +14,14 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-    if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !possible_to_beat)
         return false;
 
-    int rowOffset = int(std::abs(y() - previousPosition.second));
-    int colOffset = int(std::abs(x() - previousPosition.first));
+    if (possible_to_beat)
+        emit beatFigure(horizontalPos(), verticalPos(), color);
+
+    int rowOffset = int(std::abs(verticalPos() - previousPosition.second));
+    int colOffset = int(std::abs(horizontalPos() - previousPosition.first));
 
     if ((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0))
         return true;
@@ -72,7 +75,6 @@ bool RookFigure::isThereAnythingOnMyWay()
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
         if (blocked_by_piece)
         {
-            qDebug() << "There is something on my way!";
             return true;
         }
     }

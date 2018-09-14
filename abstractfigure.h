@@ -21,7 +21,7 @@ protected:
     std::pair<int, int> previousPosition;   //col, row
     bool occupancy;
     bool blocked_by_piece;
-    bool possible_to_beat;
+    bool possible_to_beat = false;
 public:
     explicit AbstractFigure(QObject *parent = nullptr);
     figureColors color;
@@ -41,8 +41,10 @@ signals:
     void disableFiguresPickUp(bool state, figureColors color);
     void checkIfOtherFigureHasSamePosition(int col, int row, figureColors color);
     void checkIfThereIsSomethingOnMyWay(int col, int row, figureColors color);
+    void beatFigure(int col, int row, figureColors color);
 public slots:
     void setPosition(int col, int row);
+    void canBeat(bool beat);
 };
 
 #endif // ABSTRACTFIGURE_H

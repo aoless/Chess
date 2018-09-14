@@ -20,16 +20,10 @@ bool PawnFigure::moveIsValid()
     int offset;
     int begginingOffset = 0;
 
-    qDebug() << "Check if move is valid!";
-
     isWhite() ? offset = 100 : offset = -100;
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
-    if (thereIsOtherPieceOnField())
-    {
-        qDebug() << "there is other piece";
-        return false;
-    }
+    return !thereIsOtherPieceOnField();
 
     if (horizontalPos() == previousPosition.first && (verticalPos() == previousPosition.second - offset ||
        (verticalPos() == previousPosition.second - offset - begginingOffset)))

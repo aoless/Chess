@@ -15,8 +15,11 @@ BishopFigure::BishopFigure(figureColors type)
 
 bool BishopFigure::moveIsValid()
 {
-    if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !possible_to_beat)
         return false;
+
+    if (possible_to_beat)
+        emit beatFigure(horizontalPos(), verticalPos(), color);
 
     int rowOffset = int(std::abs(y() - previousPosition.second));
 
@@ -33,7 +36,7 @@ bool BishopFigure::isItPossibleToBeat()
 
 bool BishopFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(horizontalPos(), horizontalPos(), color);
+    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
     return occupancy;
 }
 

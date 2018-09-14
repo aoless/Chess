@@ -17,8 +17,11 @@ KnightFigure::KnightFigure(figureColors type)
 
 bool KnightFigure::moveIsValid()
 {
-    if (thereIsOtherPieceOnField())
+    if (thereIsOtherPieceOnField() && !possible_to_beat)
         return false;
+
+    if (possible_to_beat)
+        beatFigure(horizontalPos(), verticalPos(), color);
 
     int colJump = std::abs(previousPosition.second - verticalPos());
     int rowJump = std::abs(previousPosition.first - horizontalPos());
