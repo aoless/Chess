@@ -14,10 +14,11 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !possible_to_beat)
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
         return false;
 
-    if (possible_to_beat)
+    qDebug() << "A tu cos robie??";
+    if (isItPossibleToBeat())
         emit beatFigure(horizontalPos(), verticalPos(), color);
 
     int rowOffset = int(std::abs(verticalPos() - previousPosition.second));
@@ -31,7 +32,7 @@ bool RookFigure::moveIsValid()
 
 bool RookFigure::isItPossibleToBeat()
 {
-    return false;
+    return possible_to_beat;
 }
 
 bool RookFigure::thereIsOtherPieceOnField()

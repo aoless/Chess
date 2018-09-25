@@ -253,6 +253,7 @@ void Board::disableFiguresPickUp(bool state, figureColors color)
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)
 {
     int counter = 0;
+    qDebug() << "no wchodzi tu";
     for (auto& piece : figures)
     {
         for (auto& p : piece.second)
@@ -261,12 +262,15 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
             {
                 counter++;
                 if (p->color != color && piece.first != "King")
+                {
+                    qDebug() << "Jakim chujem tu wchodzi";
                     emit canBeat(true);
+                }
             }
         }
     }
 
-
+    qDebug() << "tu tez jest";
     if (counter > 1)
         emit fieldIsOccupied(true);
     else
@@ -276,6 +280,8 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
         emit thereIsSomethingOnTheWay(true);
     else
         emit thereIsSomethingOnTheWay(false);
+    qDebug() << "a tu?";
+    qDebug() << counter;
 
 }
 

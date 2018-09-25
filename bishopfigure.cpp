@@ -15,23 +15,23 @@ BishopFigure::BishopFigure(figureColors type)
 
 bool BishopFigure::moveIsValid()
 {
-    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !possible_to_beat)
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
         return false;
-
-    if (possible_to_beat)
-        emit beatFigure(horizontalPos(), verticalPos(), color);
 
     int rowOffset = int(std::abs(y() - previousPosition.second));
 
-    if (rowOffset == int(std::abs(x() - previousPosition.first)))
-        return true;
+    if (rowOffset != int(std::abs(x() - previousPosition.first)))
+        return false;
 
-    return false;
+    if (isItPossibleToBeat())
+        emit beatFigure(horizontalPos(), verticalPos(), color);
+
+    return true;
 }
 
 bool BishopFigure::isItPossibleToBeat()
 {
-    return false;
+    return possible_to_beat;
 }
 
 bool BishopFigure::thereIsOtherPieceOnField()

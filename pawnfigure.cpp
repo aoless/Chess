@@ -23,7 +23,24 @@ bool PawnFigure::moveIsValid()
     isWhite() ? offset = 100 : offset = -100;
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
-    return !thereIsOtherPieceOnField();
+    if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
+    {
+        return false;
+    }
+
+    if (isItPossibleToBeat())
+    {
+        if (std::abs(horizontalPos() - previousPosition.first) == 100 &&
+            std::abs(verticalPos() - previousPosition.second) == 100)
+        {
+            emit beatFigure(horizontalPos(), verticalPos(), color);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     if (horizontalPos() == previousPosition.first && (verticalPos() == previousPosition.second - offset ||
        (verticalPos() == previousPosition.second - offset - begginingOffset)))
@@ -37,7 +54,7 @@ bool PawnFigure::moveIsValid()
 
 bool PawnFigure::isItPossibleToBeat()
 {
-    return false;
+    return possible_to_beat;
 }
 
 bool PawnFigure::isItBegginingOfGame()

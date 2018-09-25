@@ -29,6 +29,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
     }
     else if (mode == unclicked && possible_to_click)
     {
+        possible_to_beat = false;
         setZValue(1);
         emit propagateInfoOfAbilityToMove(this);
         mode = clicked;
