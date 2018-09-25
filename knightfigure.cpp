@@ -17,19 +17,17 @@ KnightFigure::KnightFigure(figureColors type)
 
 bool KnightFigure::moveIsValid()
 {
-    if (thereIsOtherPieceOnField() && !possible_to_beat)
-        return false;
-
-    if (possible_to_beat)
-        beatFigure(horizontalPos(), verticalPos(), color);
-
     int colJump = std::abs(previousPosition.second - verticalPos());
     int rowJump = std::abs(previousPosition.first - horizontalPos());
 
-    if (colJump == 100 && rowJump == 200)
+    if ((colJump == 100 && rowJump == 200) || (colJump == 200 && rowJump == 100))
+    {
+        if (thereIsOtherPieceOnField() && !possible_to_beat)
+            return false;
+        if (possible_to_beat)
+            beatFigure(horizontalPos(), verticalPos(), color);
         return true;
-    else if (colJump == 200 && rowJump == 100)
-        return true;
+    }
     else
         return false;
 }
