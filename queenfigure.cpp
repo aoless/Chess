@@ -17,27 +17,13 @@ bool QueenFigure::moveIsValid()
     int rowOffset = int(std::abs(verticalPos() - previousPosition.second));
     int colOffset = int(std::abs(horizontalPos() - previousPosition.first));
 
-    if (rowOffset > 0 && colOffset == 0)
-    {
-        if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
-            return false;
-    }
-    else if (rowOffset == 0 && colOffset > 0)
-    {
-        if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
-            return false;
-    }
-    else if (rowOffset == colOffset)
-    {
-        if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
-            return false;
-    }
-    else
-    {
+    if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0) || (rowOffset == colOffset)))
         return false;
-    }
 
-    if (possible_to_beat)
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
+        return false;
+
+    if (isItPossibleToBeat())
         emit beatFigure(horizontalPos(), verticalPos(), color);
 
     return true;
@@ -105,6 +91,5 @@ bool QueenFigure::isThereAnythingOnMyWay()
             return true;
     }
 
-    qDebug() << "nie ma nic na mojej drodze";
     return false;
 }

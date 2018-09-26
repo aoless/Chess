@@ -14,20 +14,19 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
-        return false;
-
-    qDebug() << "A tu cos robie??";
-    if (isItPossibleToBeat())
-        emit beatFigure(horizontalPos(), verticalPos(), color);
-
     int rowOffset = int(std::abs(verticalPos() - previousPosition.second));
     int colOffset = int(std::abs(horizontalPos() - previousPosition.first));
 
-    if ((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0))
-        return true;
+    if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0)))
+        return false;
 
-    return false;
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
+        return false;
+
+    if (isItPossibleToBeat())
+        emit beatFigure(horizontalPos(), verticalPos(), color);
+
+    return true;
 }
 
 bool RookFigure::isItPossibleToBeat()
@@ -48,26 +47,24 @@ bool RookFigure::isThereAnythingOnMyWay()
     int rowOffset = 0;
     bool goingUp = previousPosition.second - verticalPos() > 0;
     bool goingRight = previousPosition.first - horizontalPos() < 0;
+    bool goingLeft = previousPosition.first - horizontalPos() > 0;
+    bool goingDown = previousPosition.second - verticalPos() < 0;
 
     if (goingUp)
     {
-        colOffset = 0;
-        rowOffset = -100;
-    }
-    else if (!goingUp && !goingRight)
-    {
-        colOffset = 0;
-        rowOffset = 100;
+        colOffset = 0; rowOffset = -100;
     }
     else if (goingRight)
     {
-        colOffset = 100;
-        rowOffset = 0;
+        colOffset = 100; rowOffset = 0;
     }
-    else
+    else if (goingLeft)
     {
-        colOffset = -100;
-        rowOffset = 0;
+        colOffset = -100; rowOffset = 0;
+    }
+    else if(goingDown)
+    {
+        colOffset = 0; rowOffset = 100;
     }
 
     for (col = previousPosition.first, row = previousPosition.second; col != horizontalPos() || row != verticalPos();

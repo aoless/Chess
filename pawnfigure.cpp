@@ -24,22 +24,23 @@ bool PawnFigure::moveIsValid()
     isItBegginingOfGame() ? begginingOffset = offset : begginingOffset = 0;
 
     if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
-    {
         return false;
-    }
 
-    if (isItPossibleToBeat())
+    if (!isItPossibleToBeat())
+        return true;
+
+    int colOffset = std::abs(horizontalPos() - previousPosition.first);
+    int rowOffset = verticalPos() - previousPosition.second;
+
+    if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
     {
-        if (std::abs(horizontalPos() - previousPosition.first) == 100 &&
-            std::abs(verticalPos() - previousPosition.second) == 100)
-        {
-            emit beatFigure(horizontalPos(), verticalPos(), color);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        emit beatFigure(horizontalPos(), verticalPos(), color);
+        return true;
+    }
+    else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
+    {
+        emit beatFigure(horizontalPos(), verticalPos(), color);
+        return true;
     }
 
     if (horizontalPos() == previousPosition.first && (verticalPos() == previousPosition.second - offset ||

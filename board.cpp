@@ -257,8 +257,6 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
     {
         for (auto& p : piece.second)
         {
-//            qDebug() << "col: " << col << " row: " << row;
-//            qDebug() << "hp: " << p->horizontalPos() << " vp: " << p->verticalPos();
             if (p->horizontalPos() == col && p->verticalPos() == row)
             {
                 counter++;
@@ -268,16 +266,8 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
         }
     }
 
-    if (counter > 1)
-        emit fieldIsOccupied(true);
-    else
-        emit fieldIsOccupied(false);
-
-    if(counter == 1)
-        emit thereIsSomethingOnTheWay(true);
-    else
-        emit thereIsSomethingOnTheWay(false);
-    qDebug() << counter;
+    emit fieldIsOccupied(counter > 1);
+    emit thereIsSomethingOnTheWay(counter == 1);
 
 }
 
@@ -290,9 +280,7 @@ void Board::removePiece(int col, int row, figureColors color)
         auto object = std::find_if(vec.begin(), vec.end(), [&](std::unique_ptr<AbstractFigure>& obj){
             return (obj->horizontalPos() == col && obj->verticalPos() == row && obj->color != color); });
 
-        if (object == vec.end())
-            continue;
-        else
+        if (object != vec.end())
         {
             vec.erase(std::remove(vec.begin(), vec.end(), *object));
             break;

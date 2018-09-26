@@ -14,8 +14,11 @@ KingFigure::KingFigure(figureColors type)
 
 bool KingFigure::moveIsValid()
 {
-    if (thereIsOtherPieceOnField())
+    if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
         return false;
+
+    if(isItPossibleToBeat())
+        emit beatFigure(horizontalPos(), verticalPos(), color);
 
     bool goingToFarVerticaly = std::abs(previousPosition.second - verticalPos()) > 100;
     bool goingToFarHorizontaly = std::abs(previousPosition.first - horizontalPos()) > 100;
