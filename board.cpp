@@ -113,11 +113,11 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
     for (int i = 0; i < 1; i++)
         createFigure(king, figureColors::white);
 
-    addPawnsToBoard(scene, figures["Pawn"]);
+//    addPawnsToBoard(scene, figures["Pawn"]);
     addBishopsToBoard(scene, figures["Bishop"]);
     addKnightsToBoard(scene, figures["Knight"]);
     addRooksToBoard(scene, figures["Rook"]);
-    addQueenToBoard(scene, figures["Queen"]);
+//    addQueenToBoard(scene, figures["Queen"]);
     addKingToBoard(scene, figures["King"]);
 }
 
@@ -215,15 +215,17 @@ void Board::setUpFigureOnScene(QGraphicsScene* scene, AbstractFigure* figure, st
 
 void Board::connecter(const AbstractFigure* figure)
 {
-    connect(figure, AbstractFigure::propagateInfoOfAbilityToMove, this, Board::enableToMoveFigure);
-    connect(figure, AbstractFigure::propagateInfoOfDisabilityToMove, this, Board::refuseToMoveFigure);
-    connect(figure, AbstractFigure::disableFiguresPickUp, this, Board::disableFiguresPickUp);
-    connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition, this, Board::checkIfThereIsFewFiguresOnSameField);
-    connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay, this, Board::checkIfThereIsFewFiguresOnSameField);
-    connect(figure, AbstractFigure::beatFigure, this, Board::removePiece);
-    connect(this, Board::fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
-    connect(this, Board::thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
-    connect(this, Board::canBeat, figure, AbstractFigure::canBeat);
+    connect(figure, AbstractFigure::propagateInfoOfAbilityToMove, this, enableToMoveFigure);
+    connect(figure, AbstractFigure::propagateInfoOfDisabilityToMove, this, refuseToMoveFigure);
+    connect(figure, AbstractFigure::disableFiguresPickUp, this, disableFiguresPickUp);
+    connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition, this, checkIfThereIsFewFiguresOnSameField);
+    connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay, this, checkIfThereIsFewFiguresOnSameField);
+    connect(figure, AbstractFigure::beatFigure, this, removePiece);
+    connect(figure, AbstractFigure::castling, this, castlingHandler);
+    connect(figure, AbstractFigure::castlingBlocker, this, disableCasting);
+    connect(this, fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
+    connect(this, thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
+    connect(this, canBeat, figure, AbstractFigure::canBeat);
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
@@ -250,6 +252,37 @@ void Board::disableFiguresPickUp(bool state, figureColors color)
                 p->changePossibilityToClick(!state);
 }
 
+void Board::castlingHandler(int rookCol, int rookRow, QString direction)
+{
+    qDebug() << rookCol << " " << rookRow;
+    int offset;
+
+    if (direction == "left")
+        offset = -200;
+    else if (direction == "right")
+        offset = 200;
+
+    for (const auto& piece : figures)
+        for (const auto& p : piece.second)
+        {
+            if (p->ranks() == rookCol && p->files() == rookRow && p->neverMoved)
+            {
+                p->setPosition(rookCol + offset, rookRow);
+                p->changeStateOfPreviousPosition(rookCol + offset, rookRow);
+            }
+        }
+}
+
+void Board::disableCasting(figureColors color)
+{
+    for (const auto& piece : figures)
+        for (const auto& p : piece.second)
+        {
+            if (p->color == color && piece.first == "King")
+                p->neverMoved = false;
+        }
+}
+
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)
 {
     int counter = 0;
@@ -257,7 +290,7 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
     {
         for (auto& p : piece.second)
         {
-            if (p->horizontalPos() == col && p->verticalPos() == row)
+            if (p->ranks() == col && p->files() == row)
             {
                 counter++;
                 if (p->color != color && piece.first != "King")
@@ -266,6 +299,7 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
         }
     }
 
+    qDebug() << "counter: " << counter;
     emit fieldIsOccupied(counter > 1);
     emit thereIsSomethingOnTheWay(counter == 1);
 
@@ -278,7 +312,7 @@ void Board::removePiece(int col, int row, figureColors color)
         auto& vec = piece.second;
 
         auto object = std::find_if(vec.begin(), vec.end(), [&](std::unique_ptr<AbstractFigure>& obj){
-            return (obj->horizontalPos() == col && obj->verticalPos() == row && obj->color != color); });
+            return (obj->ranks() == col && obj->files() == row && obj->color != color); });
 
         if (object != vec.end())
         {

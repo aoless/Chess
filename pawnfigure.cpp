@@ -26,25 +26,29 @@ bool PawnFigure::moveIsValid()
     if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
         return false;
 
-    if (!isItPossibleToBeat())
-        return true;
+    int colOffset = std::abs(ranks() - previousPosition.first);
+    int rowOffset = files() - previousPosition.second;
 
-    int colOffset = std::abs(horizontalPos() - previousPosition.first);
-    int rowOffset = verticalPos() - previousPosition.second;
-
-    if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
+    if (isItPossibleToBeat())
     {
-        emit beatFigure(horizontalPos(), verticalPos(), color);
-        return true;
-    }
-    else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
-    {
-        emit beatFigure(horizontalPos(), verticalPos(), color);
-        return true;
+        if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
+        {
+            emit beatFigure(ranks(), files(), color);
+            return true;
+        }
+        else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
+        {
+            emit beatFigure(ranks(), files(), color);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
-    if (horizontalPos() == previousPosition.first && (verticalPos() == previousPosition.second - offset ||
-       (verticalPos() == previousPosition.second - offset - begginingOffset)))
+    if (ranks() == previousPosition.first && (files() == previousPosition.second - offset ||
+       (files() == previousPosition.second - offset - begginingOffset)))
     {
         beggining = false;
         return true;
@@ -65,6 +69,6 @@ bool PawnFigure::isItBegginingOfGame()
 
 bool PawnFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
+    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
     return occupancy;
 }

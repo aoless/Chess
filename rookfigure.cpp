@@ -14,8 +14,8 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-    int rowOffset = int(std::abs(verticalPos() - previousPosition.second));
-    int colOffset = int(std::abs(horizontalPos() - previousPosition.first));
+    int rowOffset = int(std::abs(files() - previousPosition.second));
+    int colOffset = int(std::abs(ranks() - previousPosition.first));
 
     if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0)))
         return false;
@@ -24,8 +24,9 @@ bool RookFigure::moveIsValid()
         return false;
 
     if (isItPossibleToBeat())
-        emit beatFigure(horizontalPos(), verticalPos(), color);
+        emit beatFigure(ranks(), files(), color);
 
+    emit castlingBlocker(color);
     return true;
 }
 
@@ -36,7 +37,7 @@ bool RookFigure::isItPossibleToBeat()
 
 bool RookFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
+    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
     return occupancy;
 }
 
@@ -45,10 +46,10 @@ bool RookFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - verticalPos() > 0;
-    bool goingRight = previousPosition.first - horizontalPos() < 0;
-    bool goingLeft = previousPosition.first - horizontalPos() > 0;
-    bool goingDown = previousPosition.second - verticalPos() < 0;
+    bool goingUp = previousPosition.second - files() > 0;
+    bool goingRight = previousPosition.first - ranks() < 0;
+    bool goingLeft = previousPosition.first - ranks() > 0;
+    bool goingDown = previousPosition.second - files() < 0;
 
     if (goingUp)
     {
@@ -67,7 +68,7 @@ bool RookFigure::isThereAnythingOnMyWay()
         colOffset = 0; rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != horizontalPos() || row != verticalPos();
+    for (col = previousPosition.first, row = previousPosition.second; col != ranks() && row != files();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);

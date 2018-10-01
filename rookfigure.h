@@ -11,10 +11,6 @@ public:
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
-
-signals:
-
-public slots:
 };
 
 #endif // ROOKFIGURE_H

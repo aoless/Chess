@@ -17,28 +17,31 @@ KnightFigure::KnightFigure(figureColors type)
 
 bool KnightFigure::moveIsValid()
 {
-    int colJump = std::abs(previousPosition.second - verticalPos());
-    int rowJump = std::abs(previousPosition.first - horizontalPos());
+    int colJump = std::abs(previousPosition.second - files());
+    int rowJump = std::abs(previousPosition.first - ranks());
 
     if ((colJump == 100 && rowJump == 200) || (colJump == 200 && rowJump == 100))
     {
-        if (thereIsOtherPieceOnField() && !possible_to_beat)
+        if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
             return false;
-        if (possible_to_beat)
-            beatFigure(horizontalPos(), verticalPos(), color);
-        return true;
+
+        if (isItPossibleToBeat())
+            beatFigure(ranks(), files(), color);
+
     }
     else
         return false;
+
+    return true;
 }
 
 bool KnightFigure::isItPossibleToBeat()
 {
-    return false;
+    return possible_to_beat;
 }
 
 bool KnightFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
+    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
     return occupancy;
 }

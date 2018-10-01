@@ -41,6 +41,8 @@ public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
     void disableFiguresPickUp(bool state, figureColors color);
+    void castlingHandler(int rookCol, int rookRow, QString direction);
+    void disableCasting(figureColors color);
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);

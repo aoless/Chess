@@ -31,8 +31,9 @@ public:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blocked);
     bool isWhite() { return color == figureColors::white; }
-    int horizontalPos() { return int(x()); }
-    int verticalPos() { return int(y()); }
+    int ranks() { return int(x()); }    // col
+    int files() { return int(y()); }    // row
+    bool neverMoved = true;
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
 signals:
@@ -42,6 +43,8 @@ signals:
     void checkIfOtherFigureHasSamePosition(int col, int row, figureColors color);
     void checkIfThereIsSomethingOnMyWay(int col, int row, figureColors color);
     void beatFigure(int col, int row, figureColors color);
+    void castling(int rookCol, int rookRow, QString direction);
+    void castlingBlocker(figureColors color);
 public slots:
     void setPosition(int col, int row);
     void canBeat(bool beat);

@@ -14,18 +14,19 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
         if (!moveIsValid())
             setPosition(previousPosition.first, previousPosition.second);
 
-        if (previousPosition.first != horizontalPos() || previousPosition.second != verticalPos())
+        if (previousPosition.first != ranks() || previousPosition.second != files())
         {
             if (color == figureColors::white)
                 emit disableFiguresPickUp(false, figureColors::white);
             else
                 emit disableFiguresPickUp(false, figureColors::black);
+
+            neverMoved = false;
         }
 
         setZValue(0);
         possible_to_beat = false;
-        changeStateOfPreviousPosition(horizontalPos(), verticalPos());
-
+        changeStateOfPreviousPosition(ranks(), files());
     }
     else if (mode == unclicked && possible_to_click)
     {

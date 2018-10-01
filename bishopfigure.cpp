@@ -24,7 +24,7 @@ bool BishopFigure::moveIsValid()
         return false;
 
     if (isItPossibleToBeat())
-        emit beatFigure(horizontalPos(), verticalPos(), color);
+        emit beatFigure(ranks(), files(), color);
 
     return true;
 }
@@ -36,42 +36,51 @@ bool BishopFigure::isItPossibleToBeat()
 
 bool BishopFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(horizontalPos(), verticalPos(), color);
+    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
     return occupancy;
 }
 
 bool BishopFigure::isThereAnythingOnMyWay()
 {
+    qDebug() << "Ja tu wchodze";
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - horizontalPos() > 0;
-    bool goingRight = previousPosition.first - horizontalPos() < 0;
+    bool goingUp = previousPosition.second - files() > 0;
+    bool goingRight = previousPosition.first - ranks() < 0;
+
+    qDebug() << previousPosition.second - files();
+    qDebug() << previousPosition.first - ranks();
 
     if (goingUp && goingRight)
     {
+        qDebug() << "prawy rog";
         colOffset = 100;
         rowOffset = -100;
     }
     else if (goingUp && !goingRight)
     {
+        qDebug() << "lewy rog";
         colOffset = -100;
         rowOffset = -100;
     }
     else if (!goingUp && goingRight)
     {
+        qDebug() << "dolny prawy rog";
         colOffset = 100;
         rowOffset = 100;
     }
     else
     {
+        qDebug() << "dolny lewy rog";
         colOffset = -100;
         rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != horizontalPos() && row != horizontalPos();
+    for (col = previousPosition.first, row = previousPosition.second; col != ranks() && row != files();
          col += colOffset, row += rowOffset)
     {
+        qDebug() << col << " " << row;
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
         if (blocked_by_piece)
             return true;
