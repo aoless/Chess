@@ -26,7 +26,7 @@ public:
     ~Field() { }
     void hoverEnterEvent(QGraphicsSceneHoverEvent *);
 signals:
-    void sendCoordinates(qreal x, qreal y);
+    void sendCoordinates(int col, int row);
     void showCoordinates(QString c);
 };
 

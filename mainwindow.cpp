@@ -22,7 +22,8 @@ void MainWindow::connecter()
 {
     for (int i = 0; i < 8; i++)
         for (int j = 0; j < 8; j++)
-            connect(board->getField(i, j), Field::showCoordinates, ui->label, QLabel::setText);
+            connect(board->getField(i, j), SIGNAL(showCoordinates(QString)),
+                ui->label, SLOT(setText(QString)));
 }
 
 MainWindow::~MainWindow()

@@ -28,8 +28,6 @@ public:
     void mousePressEvent(QGraphicsSceneMouseEvent*);
     void changeStateOfPreviousPosition(int x, int y);
     void changePossibilityToClick(bool possibility);
-    void fieldIsOccupied(bool occupied);
-    void thereIsSomethingOnTheWay(bool blocked);
     bool isWhite() { return color == figureColors::white; }
     int ranks() { return int(x()); }    // col
     int files() { return int(y()); }    // row
@@ -48,6 +46,8 @@ signals:
 public slots:
     void setPosition(int col, int row);
     void canBeat(bool beat);
+    void fieldIsOccupied(bool occupied);
+    void thereIsSomethingOnTheWay(bool blocked);
 };
 
 #endif // ABSTRACTFIGURE_H

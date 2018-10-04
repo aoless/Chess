@@ -113,11 +113,11 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
     for (int i = 0; i < 1; i++)
         createFigure(king, figureColors::white);
 
-//    addPawnsToBoard(scene, figures["Pawn"]);
+    addPawnsToBoard(scene, figures["Pawn"]);
     addBishopsToBoard(scene, figures["Bishop"]);
     addKnightsToBoard(scene, figures["Knight"]);
     addRooksToBoard(scene, figures["Rook"]);
-//    addQueenToBoard(scene, figures["Queen"]);
+    addQueenToBoard(scene, figures["Queen"]);
     addKingToBoard(scene, figures["King"]);
 }
 
@@ -215,31 +215,31 @@ void Board::setUpFigureOnScene(QGraphicsScene* scene, AbstractFigure* figure, st
 
 void Board::connecter(const AbstractFigure* figure)
 {
-    connect(figure, AbstractFigure::propagateInfoOfAbilityToMove, this, enableToMoveFigure);
-    connect(figure, AbstractFigure::propagateInfoOfDisabilityToMove, this, refuseToMoveFigure);
-    connect(figure, AbstractFigure::disableFiguresPickUp, this, disableFiguresPickUp);
-    connect(figure, AbstractFigure::checkIfOtherFigureHasSamePosition, this, checkIfThereIsFewFiguresOnSameField);
-    connect(figure, AbstractFigure::checkIfThereIsSomethingOnMyWay, this, checkIfThereIsFewFiguresOnSameField);
-    connect(figure, AbstractFigure::beatFigure, this, removePiece);
-    connect(figure, AbstractFigure::castling, this, castlingHandler);
-    connect(figure, AbstractFigure::castlingBlocker, this, disableCasting);
-    connect(this, fieldIsOccupied, figure, AbstractFigure::fieldIsOccupied);
-    connect(this, thereIsSomethingOnTheWay, figure, AbstractFigure::thereIsSomethingOnTheWay);
-    connect(this, canBeat, figure, AbstractFigure::canBeat);
+    connect(figure, SIGNAL(propagateInfoOfAbilityToMove(AbstractFigure*)), this, SLOT(enableToMoveFigure(AbstractFigure*)));
+    connect(figure, SIGNAL(propagateInfoOfDisabilityToMove(AbstractFigure*)), this, SLOT(refuseToMoveFigure(AbstractFigure*)));
+    connect(figure, SIGNAL(disableFiguresPickUp(bool,figureColors)), this, SLOT(disableFiguresPickUp(bool,figureColors)));
+    connect(figure, SIGNAL(checkIfOtherFigureHasSamePosition(int,int,figureColors)), this, SLOT(checkIfThereIsFewFiguresOnSameField(int,int,figureColors)));
+    connect(figure, SIGNAL(checkIfThereIsSomethingOnMyWay(int,int,figureColors)), this, SLOT(checkIfThereIsFewFiguresOnSameField(int,int,figureColors)));
+    connect(figure, SIGNAL(beatFigure(int,int,figureColors)), this, SLOT(removePiece(int,int,figureColors)));
+    connect(figure, SIGNAL(castling(int,int,QString)), this, SLOT(castlingHandler(int,int,QString)));
+    connect(figure, SIGNAL(castlingBlocker(figureColors)), this, SLOT(disableCasting(figureColors)));
+    connect(this, SIGNAL(fieldIsOccupied(bool)), figure, SLOT(fieldIsOccupied(bool)));
+    connect(this, SIGNAL(thereIsSomethingOnTheWay(bool)), figure, SLOT(thereIsSomethingOnTheWay(bool)));
+    connect(this, SIGNAL(canBeat(bool)), figure, SLOT(canBeat(bool)));
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
 {
     for (int i = 0; i < 8; i++)
         for (int j = 0; j < 8; j++)
-            connect(fields[i][j], Field::sendCoordinates, figure, AbstractFigure::setPosition);
+            connect(fields[i][j], SIGNAL(sendCoordinates(int,int)), figure, SLOT(setPosition(int, int)));
 }
 
 void Board::refuseToMoveFigure(AbstractFigure* figure)
 {
     for (int i = 0; i < 8; i++)
         for (int j = 0; j < 8; j++)
-            disconnect(fields[i][j], Field::sendCoordinates, figure, AbstractFigure::setPosition);
+            disconnect(fields[i][j], SIGNAL(sendCoordinates(int,int)), figure, SLOT(setPosition(int, int)));
 }
 
 void Board::disableFiguresPickUp(bool state, figureColors color)

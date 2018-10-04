@@ -35,12 +35,12 @@ public:
     void addKingToBoard(QGraphicsScene*, const AbstractFigureUniqueVec&);
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
-    void checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color);
-    void removePiece(int col, int row, figureColors color);
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
     void disableFiguresPickUp(bool state, figureColors color);
+    void checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color);
+    void removePiece(int col, int row, figureColors color);
     void castlingHandler(int rookCol, int rookRow, QString direction);
     void disableCasting(figureColors color);
 signals:
