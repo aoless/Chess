@@ -113,7 +113,7 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
     for (int i = 0; i < 1; i++)
         createFigure(king, figureColors::white);
 
-    addPawnsToBoard(scene, figures["Pawn"]);
+    // addPawnsToBoard(scene, figures["Pawn"]);
     addBishopsToBoard(scene, figures["Bishop"]);
     addKnightsToBoard(scene, figures["Knight"]);
     addRooksToBoard(scene, figures["Rook"]);
@@ -255,7 +255,7 @@ void Board::disableFiguresPickUp(bool state, figureColors color)
 void Board::castlingHandler(int rookCol, int rookRow, QString direction)
 {
     qDebug() << rookCol << " " << rookRow;
-    int offset;
+    int offset{};
 
     if (direction == "left")
         offset = -200;
@@ -265,7 +265,7 @@ void Board::castlingHandler(int rookCol, int rookRow, QString direction)
     for (const auto& piece : figures)
         for (const auto& p : piece.second)
         {
-            if (p->ranks() == rookCol && p->files() == rookRow && p->neverMoved)
+            if (p->rank() == rookCol && p->file() == rookRow && p->never_moved)
             {
                 p->setPosition(rookCol + offset, rookRow);
                 p->changeStateOfPreviousPosition(rookCol + offset, rookRow);
@@ -279,7 +279,7 @@ void Board::disableCasting(figureColors color)
         for (const auto& p : piece.second)
         {
             if (p->color == color && piece.first == "King")
-                p->neverMoved = false;
+                p->never_moved = false;
         }
 }
 
@@ -290,7 +290,7 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
     {
         for (auto& p : piece.second)
         {
-            if (p->ranks() == col && p->files() == row)
+            if (p->rank() == col && p->file() == row)
             {
                 counter++;
                 if (p->color != color && piece.first != "King")
@@ -299,7 +299,7 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
         }
     }
 
-    qDebug() << "counter: " << counter;
+    // qDebug() << "counter: " << counter;
     emit fieldIsOccupied(counter > 1);
     emit thereIsSomethingOnTheWay(counter == 1);
 
@@ -312,7 +312,7 @@ void Board::removePiece(int col, int row, figureColors color)
         auto& vec = piece.second;
 
         auto object = std::find_if(vec.begin(), vec.end(), [&](std::unique_ptr<AbstractFigure>& obj){
-            return (obj->ranks() == col && obj->files() == row && obj->color != color); });
+            return (obj->rank() == col && obj->file() == row && obj->color != color); });
 
         if (object != vec.end())
         {

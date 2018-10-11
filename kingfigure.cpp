@@ -18,26 +18,26 @@ bool KingFigure::moveIsValid()
         return false;
 
     if(isItPossibleToBeat())
-        emit beatFigure(ranks(), files(), color);
+        emit beatFigure(rank(), file(), color);
 
-    int rowOffset = files() - previousPosition.second;
-    int colOffset = ranks() - previousPosition.first;
+    int rowOffset = file() - previousPosition.second;
+    int colOffset = rank() - previousPosition.first;
 
-    if (neverMoved)
+    if (never_moved)
     {
         switch (colOffset)
         {
         case 200:
             if (isThereAnythingOnMyWay())
                 break;
-            emit castling(ranks() + 100, files(), "left");
-            neverMoved = false;
+            emit castling(rank() + 100, file(), "left");
+            never_moved = false;
             return true;
         case -300:
             if (isThereAnythingOnMyWay())
                 break;
-            emit castling(ranks() - 100, files(), "right");
-            neverMoved = false;
+            emit castling(rank() - 100, file(), "right");
+            never_moved = false;
             return true;
         default:
             break;
@@ -51,8 +51,8 @@ bool KingFigure::moveIsValid()
     if (goingToFarVerticaly || goingToFarHorizontaly)
         return false;
 
-    if (previousPosition.first != ranks() || previousPosition.second != files())
-        neverMoved = false;
+    if (previousPosition.first != rank() || previousPosition.second != file())
+        never_moved = false;
     return true;
 }
 
@@ -63,7 +63,7 @@ bool KingFigure::isItPossibleToBeat()
 
 bool KingFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
+    emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
     return occupancy;
 }
 
@@ -73,8 +73,8 @@ bool KingFigure::isThereAnythingOnMyWay()
     int colOffset = 0;
     int rowOffset = 0;
 
-    bool goingRight = previousPosition.first - ranks() < 0;
-    bool goingLeft = previousPosition.first - ranks() > 0;
+    bool goingRight = previousPosition.first - rank() < 0;
+    bool goingLeft = previousPosition.first - rank() > 0;
 
     if (goingRight)
     {
@@ -85,7 +85,7 @@ bool KingFigure::isThereAnythingOnMyWay()
         colOffset = -100; rowOffset = 0;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != ranks() || row != files();
+    for (col = previousPosition.first, row = previousPosition.second; col != rank() || row != file();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
@@ -94,4 +94,10 @@ bool KingFigure::isThereAnythingOnMyWay()
     }
 
     return false;
+}
+
+vecOfPairs KingFigure::dangeredPositions()
+{
+    vecOfPairs vop;
+    return vop;
 }

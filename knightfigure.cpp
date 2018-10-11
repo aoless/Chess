@@ -17,8 +17,8 @@ KnightFigure::KnightFigure(figureColors type)
 
 bool KnightFigure::moveIsValid()
 {
-    int colJump = std::abs(previousPosition.second - files());
-    int rowJump = std::abs(previousPosition.first - ranks());
+    int colJump = std::abs(previousPosition.second - file());
+    int rowJump = std::abs(previousPosition.first - rank());
 
     if ((colJump == 100 && rowJump == 200) || (colJump == 200 && rowJump == 100))
     {
@@ -26,7 +26,7 @@ bool KnightFigure::moveIsValid()
             return false;
 
         if (isItPossibleToBeat())
-            beatFigure(ranks(), files(), color);
+            beatFigure(rank(), file(), color);
 
     }
     else
@@ -42,6 +42,12 @@ bool KnightFigure::isItPossibleToBeat()
 
 bool KnightFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
+    emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
     return occupancy;
+}
+
+vecOfPairs KnightFigure::dangeredPositions()
+{
+    vecOfPairs vop;
+    return vop;
 }

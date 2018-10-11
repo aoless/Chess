@@ -26,19 +26,21 @@ bool PawnFigure::moveIsValid()
     if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
         return false;
 
-    int colOffset = std::abs(ranks() - previousPosition.first);
-    int rowOffset = files() - previousPosition.second;
+    int colOffset = std::abs(rank() - previousPosition.first);
+    int rowOffset = file() - previousPosition.second;
 
     if (isItPossibleToBeat())
     {
         if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
         {
-            emit beatFigure(ranks(), files(), color);
+            emit beatFigure(rank(), file(), color);
+            dangeredPositions();
             return true;
         }
         else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
         {
-            emit beatFigure(ranks(), files(), color);
+            emit beatFigure(rank(), file(), color);
+            dangeredPositions();
             return true;
         }
         else
@@ -47,10 +49,11 @@ bool PawnFigure::moveIsValid()
         }
     }
 
-    if (ranks() == previousPosition.first && (files() == previousPosition.second - offset ||
-       (files() == previousPosition.second - offset - begginingOffset)))
+    if (rank() == previousPosition.first && (file() == previousPosition.second - offset ||
+       (file() == previousPosition.second - offset - begginingOffset)))
     {
         beggining = false;
+        dangeredPositions();
         return true;
     }
 
@@ -69,6 +72,20 @@ bool PawnFigure::isItBegginingOfGame()
 
 bool PawnFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
+    emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
     return occupancy;
+}
+
+vecOfPairs PawnFigure::dangeredPositions()
+{
+    vecOfPairs dangeredPos;
+    dangeredPos.emplace_back(rank() + 100, file() - 100);
+    dangeredPos.emplace_back(rank() - 100, file() - 100);
+
+    for (auto d : dangeredPos)
+    {
+        qDebug() << d.first << " " << d.second;
+    }
+
+    return dangeredPos;
 }

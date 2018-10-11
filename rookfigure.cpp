@@ -14,8 +14,8 @@ RookFigure::RookFigure(figureColors type)
 
 bool RookFigure::moveIsValid()
 {
-    int rowOffset = int(std::abs(files() - previousPosition.second));
-    int colOffset = int(std::abs(ranks() - previousPosition.first));
+    int rowOffset = int(std::abs(file() - previousPosition.second));
+    int colOffset = int(std::abs(rank() - previousPosition.first));
 
     if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0)))
         return false;
@@ -24,7 +24,7 @@ bool RookFigure::moveIsValid()
         return false;
 
     if (isItPossibleToBeat())
-        emit beatFigure(ranks(), files(), color);
+        emit beatFigure(rank(), file(), color);
 
     emit castlingBlocker(color);
     return true;
@@ -37,7 +37,7 @@ bool RookFigure::isItPossibleToBeat()
 
 bool RookFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
+    emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
     return occupancy;
 }
 
@@ -46,10 +46,10 @@ bool RookFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - files() > 0;
-    bool goingRight = previousPosition.first - ranks() < 0;
-    bool goingLeft = previousPosition.first - ranks() > 0;
-    bool goingDown = previousPosition.second - files() < 0;
+    bool goingUp = previousPosition.second - file() > 0;
+    bool goingRight = previousPosition.first - rank() < 0;
+    bool goingLeft = previousPosition.first - rank() > 0;
+    bool goingDown = previousPosition.second - file() < 0;
 
     if (goingUp)
     {
@@ -68,7 +68,7 @@ bool RookFigure::isThereAnythingOnMyWay()
         colOffset = 0; rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != ranks() && row != files();
+    for (col = previousPosition.first, row = previousPosition.second; col != rank() && row != file();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
@@ -78,4 +78,10 @@ bool RookFigure::isThereAnythingOnMyWay()
         }
     }
     return false;
+}
+
+vecOfPairs RookFigure::dangeredPositions()
+{
+    vecOfPairs vop;
+    return vop;
 }

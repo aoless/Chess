@@ -14,8 +14,8 @@ QueenFigure::QueenFigure(figureColors type)
 
 bool QueenFigure::moveIsValid()
 {
-    int rowOffset = int(std::abs(files() - previousPosition.second));
-    int colOffset = int(std::abs(ranks() - previousPosition.first));
+    int rowOffset = int(std::abs(file() - previousPosition.second));
+    int colOffset = int(std::abs(rank() - previousPosition.first));
 
     if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0) || (rowOffset == colOffset)))
         return false;
@@ -24,7 +24,7 @@ bool QueenFigure::moveIsValid()
         return false;
 
     if (isItPossibleToBeat())
-        emit beatFigure(ranks(), files(), color);
+        emit beatFigure(rank(), file(), color);
 
     return true;
 }
@@ -36,7 +36,7 @@ bool QueenFigure::isItPossibleToBeat()
 
 bool QueenFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
+    emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
     return occupancy;
 }
 
@@ -45,10 +45,10 @@ bool QueenFigure::isThereAnythingOnMyWay()
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - files() > 0;
-    bool goingDown = previousPosition.second - files() < 0;
-    bool goingRight = previousPosition.first - ranks() < 0;
-    bool goingLeft = previousPosition.first - ranks() > 0;
+    bool goingUp = previousPosition.second - file() > 0;
+    bool goingDown = previousPosition.second - file() < 0;
+    bool goingRight = previousPosition.first - rank() < 0;
+    bool goingLeft = previousPosition.first - rank() > 0;
 
     if (goingUp && goingRight)
     {
@@ -83,7 +83,7 @@ bool QueenFigure::isThereAnythingOnMyWay()
         colOffset = -100; rowOffset = 0;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != ranks() || row != files();
+    for (col = previousPosition.first, row = previousPosition.second; col != rank() || row != file();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
@@ -92,4 +92,10 @@ bool QueenFigure::isThereAnythingOnMyWay()
     }
 
     return false;
+}
+
+vecOfPairs QueenFigure::dangeredPositions()
+{
+    vecOfPairs vop;
+    return vop;
 }

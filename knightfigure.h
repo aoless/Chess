@@ -10,6 +10,7 @@ public:
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
+    vecOfPairs dangeredPositions();
 };
 
 #endif // KNIGHTFIGURE_H

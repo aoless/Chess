@@ -11,6 +11,7 @@ public:
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
+    vecOfPairs dangeredPositions();
 
 signals:
 

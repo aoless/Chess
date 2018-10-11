@@ -24,8 +24,9 @@ bool BishopFigure::moveIsValid()
         return false;
 
     if (isItPossibleToBeat())
-        emit beatFigure(ranks(), files(), color);
+        emit beatFigure(rank(), file(), color);
 
+    dangeredPositions();
     return true;
 }
 
@@ -36,54 +37,91 @@ bool BishopFigure::isItPossibleToBeat()
 
 bool BishopFigure::thereIsOtherPieceOnField()
 {
-    emit checkIfOtherFigureHasSamePosition(ranks(), files(), color);
+    emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
     return occupancy;
 }
 
 bool BishopFigure::isThereAnythingOnMyWay()
 {
-    qDebug() << "Ja tu wchodze";
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
-    bool goingUp = previousPosition.second - files() > 0;
-    bool goingRight = previousPosition.first - ranks() < 0;
-
-    qDebug() << previousPosition.second - files();
-    qDebug() << previousPosition.first - ranks();
+    bool goingUp = previousPosition.second - file() > 0;
+    bool goingRight = previousPosition.first - rank() < 0;
 
     if (goingUp && goingRight)
     {
-        qDebug() << "prawy rog";
         colOffset = 100;
         rowOffset = -100;
     }
     else if (goingUp && !goingRight)
     {
-        qDebug() << "lewy rog";
         colOffset = -100;
         rowOffset = -100;
     }
     else if (!goingUp && goingRight)
     {
-        qDebug() << "dolny prawy rog";
         colOffset = 100;
         rowOffset = 100;
     }
     else
     {
-        qDebug() << "dolny lewy rog";
         colOffset = -100;
         rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != ranks() && row != files();
+    for (col = previousPosition.first, row = previousPosition.second; col != rank() && row != file();
          col += colOffset, row += rowOffset)
     {
-        qDebug() << col << " " << row;
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
         if (blocked_by_piece)
             return true;
     }
     return false;
+}
+
+vecOfPairs BishopFigure::dangeredPositions()
+{
+    vecOfPairs dangeredPos;
+    vecOfPairs possibleDirections;
+
+    std::pair<int, int> rightUpperCorner(100, -100);
+    std::pair<int, int> leftUpperCorner(-100, -100);
+    std::pair<int, int> rightDownCorner(100, 100);
+    std::pair<int, int> leftDownCorner(-100, 100);
+
+    possibleDirections.push_back(rightUpperCorner);
+    possibleDirections.push_back(leftUpperCorner);
+    possibleDirections.push_back(rightDownCorner);
+    possibleDirections.push_back(leftDownCorner);
+
+    int col = rank();
+    int row = file();
+
+    for (auto pD : possibleDirections)
+    {
+        qDebug() << "==========";
+        while(((col < 700 && col > 0) && (row < 700 && row > 0)))
+        {
+            col += pD.first;
+            row += pD.second;
+            emit checkIfThereIsSomethingOnMyWay(col, row, color);
+            qDebug() << col << " " << row;
+            if (blocked_by_piece)
+                break;
+            dangeredPos.emplace_back(rank() + pD.first, file() + pD.second);
+        }
+
+        blocked_by_piece = false;
+        col = rank();
+        row = file();
+
+    }
+
+    for (auto d : dangeredPos)
+    {
+        qDebug() << d.first << " " << d.second;
+    }
+
+    return dangeredPos;
 }

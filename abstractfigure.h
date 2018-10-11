@@ -8,6 +8,8 @@
 #include <QDebug>
 #include <memory>
 
+using vecOfPairs = std::vector<std::pair<int, int>>;
+
 enum MODE { clicked, unclicked };
 enum class figureColors { white, black };
 
@@ -19,21 +21,22 @@ private:
     bool possible_to_click = false;
 protected:
     std::pair<int, int> previousPosition;   //col, row
-    bool occupancy;
-    bool blocked_by_piece;
+    bool occupancy = false;
+    bool blocked_by_piece = false;
     bool possible_to_beat = false;
 public:
     explicit AbstractFigure(QObject *parent = nullptr);
+    int rank() { return int(x()); }    // col
+    int file() { return int(y()); }    // row
     figureColors color;
+    bool never_moved = true;
     void mousePressEvent(QGraphicsSceneMouseEvent*);
     void changeStateOfPreviousPosition(int x, int y);
     void changePossibilityToClick(bool possibility);
     bool isWhite() { return color == figureColors::white; }
-    int ranks() { return int(x()); }    // col
-    int files() { return int(y()); }    // row
-    bool neverMoved = true;
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
+    virtual vecOfPairs dangeredPositions() = 0;
 signals:
     void propagateInfoOfAbilityToMove(AbstractFigure* figure);
     void propagateInfoOfDisabilityToMove(AbstractFigure* figure);

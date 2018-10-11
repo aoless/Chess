@@ -13,6 +13,7 @@ public:
     bool isItPossibleToBeat();
     bool isItBegginingOfGame();
     bool thereIsOtherPieceOnField();
+    vecOfPairs dangeredPositions();
 };
 
 #endif // PAWNFIGURE_H

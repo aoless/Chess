@@ -14,6 +14,7 @@ public:
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
+    vecOfPairs dangeredPositions();
 };
 
 #endif // KINGFIGURE_H
