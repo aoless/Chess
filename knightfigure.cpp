@@ -32,6 +32,7 @@ bool KnightFigure::moveIsValid()
     else
         return false;
 
+    dangeredPositions();
     return true;
 }
 
@@ -48,6 +49,36 @@ bool KnightFigure::thereIsOtherPieceOnField()
 
 vecOfPairs KnightFigure::dangeredPositions()
 {
-    vecOfPairs vop;
-    return vop;
+    vecOfPairs dangeredPos;
+    vecOfPairs possibleDirections;
+
+
+    possibleDirections = { std::make_pair(200, 100), std::make_pair(100, 200), std::make_pair(-200, 100), std::make_pair(-100, 200),
+                           std::make_pair(200, -100), std::make_pair(100, -200), std::make_pair(-200, -100), std::make_pair(-100, -200)};
+
+    int col = rank();
+    int row = file();
+
+    for (auto pD : possibleDirections)
+    {
+        col += pD.first;
+        row += pD.second;
+        if ((col > 700 || col < 0) || (row > 700 || row < 0))
+        {
+            col = rank();
+            row = file();
+            continue;
+        }
+        dangeredPos.emplace_back(col, row);
+
+        col = rank();
+        row = file();
+    }
+
+    for (auto d : dangeredPos)
+    {
+        qDebug() << "(" << d.first << ", " << d.second << ")";
+    }
+
+    return dangeredPos;
 }

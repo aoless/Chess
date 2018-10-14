@@ -79,12 +79,17 @@ bool PawnFigure::thereIsOtherPieceOnField()
 vecOfPairs PawnFigure::dangeredPositions()
 {
     vecOfPairs dangeredPos;
-    dangeredPos.emplace_back(rank() + 100, file() - 100);
-    dangeredPos.emplace_back(rank() - 100, file() - 100);
+    int step = 100;
+    if (!isWhite())
+        step = -step;
+
+    dangeredPos.emplace_back(rank() + step, file() - step);
+    dangeredPos.emplace_back(rank() - step, file() - step);
+
 
     for (auto d : dangeredPos)
     {
-        qDebug() << d.first << " " << d.second;
+        qDebug() << "(" << d.first << ", " << d.second << ")";
     }
 
     return dangeredPos;

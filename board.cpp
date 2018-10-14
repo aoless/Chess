@@ -113,7 +113,7 @@ void Board::createFiguresAndAddPiecesToBoard(QGraphicsScene* scene)
     for (int i = 0; i < 1; i++)
         createFigure(king, figureColors::white);
 
-    // addPawnsToBoard(scene, figures["Pawn"]);
+    addPawnsToBoard(scene, figures["Pawn"]);
     addBishopsToBoard(scene, figures["Bishop"]);
     addKnightsToBoard(scene, figures["Knight"]);
     addRooksToBoard(scene, figures["Rook"]);

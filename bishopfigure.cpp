@@ -85,42 +85,31 @@ vecOfPairs BishopFigure::dangeredPositions()
     vecOfPairs dangeredPos;
     vecOfPairs possibleDirections;
 
-    std::pair<int, int> rightUpperCorner(100, -100);
-    std::pair<int, int> leftUpperCorner(-100, -100);
-    std::pair<int, int> rightDownCorner(100, 100);
-    std::pair<int, int> leftDownCorner(-100, 100);
-
-    possibleDirections.push_back(rightUpperCorner);
-    possibleDirections.push_back(leftUpperCorner);
-    possibleDirections.push_back(rightDownCorner);
-    possibleDirections.push_back(leftDownCorner);
+    possibleDirections = { std::make_pair(100, -100), std::make_pair(-100, -100), std::make_pair(100, 100), std::make_pair(-100, 100) };
 
     int col = rank();
     int row = file();
 
     for (auto pD : possibleDirections)
     {
-        qDebug() << "==========";
-        while(((col < 700 && col > 0) && (row < 700 && row > 0)))
+        while((col < 700 && col > 0) && (row < 700 && row > 0))
         {
             col += pD.first;
             row += pD.second;
             emit checkIfThereIsSomethingOnMyWay(col, row, color);
-            qDebug() << col << " " << row;
+            dangeredPos.emplace_back(col, row);
             if (blocked_by_piece)
                 break;
-            dangeredPos.emplace_back(rank() + pD.first, file() + pD.second);
         }
 
         blocked_by_piece = false;
         col = rank();
         row = file();
-
     }
 
     for (auto d : dangeredPos)
     {
-        qDebug() << d.first << " " << d.second;
+        qDebug() << "(" << d.first << ", " << d.second << ")";
     }
 
     return dangeredPos;

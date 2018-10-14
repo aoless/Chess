@@ -53,6 +53,8 @@ bool KingFigure::moveIsValid()
 
     if (previousPosition.first != rank() || previousPosition.second != file())
         never_moved = false;
+
+    dangeredPositions();
     return true;
 }
 
@@ -98,6 +100,27 @@ bool KingFigure::isThereAnythingOnMyWay()
 
 vecOfPairs KingFigure::dangeredPositions()
 {
-    vecOfPairs vop;
-    return vop;
+    vecOfPairs dangeredPos;
+    vecOfPairs possibleDirections;
+
+    possibleDirections = { std::make_pair(100, 0), std::make_pair(-100, 0), std::make_pair(0, 100), std::make_pair(0, -100),
+                           std::make_pair(100, -100), std::make_pair(-100, -100), std::make_pair(100, 100), std::make_pair(-100, 100)};
+    int col = rank();
+    int row = file();
+
+    for (auto pD : possibleDirections)
+    {
+        col += pD.first; row += pD.second;
+        dangeredPos.emplace_back(col, row);
+
+        col = rank();
+        row = file();
+    }
+
+    for (auto d : dangeredPos)
+    {
+        qDebug() << "(" << d.first << ", " << d.second << ")";
+    }
+
+    return dangeredPos;
 }

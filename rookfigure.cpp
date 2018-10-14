@@ -27,6 +27,7 @@ bool RookFigure::moveIsValid()
         emit beatFigure(rank(), file(), color);
 
     emit castlingBlocker(color);
+    dangeredPositions();
     return true;
 }
 
@@ -82,6 +83,33 @@ bool RookFigure::isThereAnythingOnMyWay()
 
 vecOfPairs RookFigure::dangeredPositions()
 {
-    vecOfPairs vop;
-    return vop;
+    vecOfPairs dangeredPos;
+    vecOfPairs possibleDirections;
+
+    possibleDirections = { std::make_pair(100, 0), std::make_pair(-100, 0), std::make_pair(0, 100), std::make_pair(0, -100) };
+    int col = rank();
+    int row = file();
+
+    for (auto pD : possibleDirections)
+    {
+        while((col < 700 && col > 0) && (row < 700 && row > 0))
+        {
+            col += pD.first; row += pD.second;
+            emit checkIfThereIsSomethingOnMyWay(col, row, color);
+            dangeredPos.emplace_back(col, row);
+            if (blocked_by_piece)
+                break;
+        }
+
+        blocked_by_piece = false;
+        col = rank();
+        row = file();
+    }
+
+    for (auto d : dangeredPos)
+    {
+        qDebug() << "(" << d.first << ", " << d.second << ")";
+    }
+
+    return dangeredPos;
 }
