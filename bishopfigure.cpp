@@ -26,7 +26,7 @@ bool BishopFigure::moveIsValid()
     if (isItPossibleToBeat())
         emit beatFigure(rank(), file(), color);
 
-    dangeredPositions();
+    // dangeredPositions();
     return true;
 }
 
@@ -107,10 +107,10 @@ vecOfPairs BishopFigure::dangeredPositions()
         row = file();
     }
 
-    for (auto d : dangeredPos)
-    {
-        qDebug() << "(" << d.first << ", " << d.second << ")";
-    }
+//    for (auto d : dangeredPos)
+//    {
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
 
     return dangeredPos;
 }

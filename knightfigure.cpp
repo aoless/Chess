@@ -32,7 +32,7 @@ bool KnightFigure::moveIsValid()
     else
         return false;
 
-    dangeredPositions();
+    // dangeredPositions();
     return true;
 }
 
@@ -75,10 +75,10 @@ vecOfPairs KnightFigure::dangeredPositions()
         row = file();
     }
 
-    for (auto d : dangeredPos)
-    {
-        qDebug() << "(" << d.first << ", " << d.second << ")";
-    }
+//    for (auto d : dangeredPos)
+//    {
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
 
     return dangeredPos;
 }

@@ -213,6 +213,26 @@ void Board::setUpFigureOnScene(QGraphicsScene* scene, AbstractFigure* figure, st
     connecter(figure);
 }
 
+void Board::checkIfChek()
+{
+    for (auto& piece : figures)
+    {
+        for (auto& p : piece.second)
+        {
+                if (piece.first == "King")
+                {
+                    auto it = std::find(whiteAttackingFields_.begin(), whiteAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
+                    if (it != whiteAttackingFields_.end())
+                        qDebug() << "BLACK in CHECK!";
+
+                    it = std::find(blackAttackingFields_.begin(), blackAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
+                    if (it != blackAttackingFields_.end())
+                        qDebug() << "WHITE in CHECK!";
+                }
+        }
+    }
+}
+
 void Board::connecter(const AbstractFigure* figure)
 {
     connect(figure, SIGNAL(propagateInfoOfAbilityToMove(AbstractFigure*)), this, SLOT(enableToMoveFigure(AbstractFigure*)));
@@ -223,6 +243,7 @@ void Board::connecter(const AbstractFigure* figure)
     connect(figure, SIGNAL(beatFigure(int,int,figureColors)), this, SLOT(removePiece(int,int,figureColors)));
     connect(figure, SIGNAL(castling(int,int,QString)), this, SLOT(castlingHandler(int,int,QString)));
     connect(figure, SIGNAL(castlingBlocker(figureColors)), this, SLOT(disableCasting(figureColors)));
+    connect(figure, SIGNAL(addDangeredFields()), this, SLOT(addDangeredFields()));
     connect(this, SIGNAL(fieldIsOccupied(bool)), figure, SLOT(fieldIsOccupied(bool)));
     connect(this, SIGNAL(thereIsSomethingOnTheWay(bool)), figure, SLOT(thereIsSomethingOnTheWay(bool)));
     connect(this, SIGNAL(canBeat(bool)), figure, SLOT(canBeat(bool)));
@@ -281,6 +302,21 @@ void Board::disableCasting(figureColors color)
             if (p->color == color && piece.first == "King")
                 p->never_moved = false;
         }
+}
+
+void Board::addDangeredFields()
+{
+    vecOfPairs temp;
+    whiteAttackingFields_.clear();
+    blackAttackingFields_.clear();
+    for (const auto& piece : figures)
+        for (const auto& p : piece.second)
+        {
+            temp = p->dangeredPositions();
+            p->isWhite() ? whiteAttackingFields_.insert(whiteAttackingFields_.end(), temp.begin(), temp.end()) :
+                blackAttackingFields_.insert(blackAttackingFields_.end(), temp.begin(), temp.end());
+        }
+    checkIfChek();
 }
 
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)

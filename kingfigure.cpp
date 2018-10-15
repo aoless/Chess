@@ -54,7 +54,7 @@ bool KingFigure::moveIsValid()
     if (previousPosition.first != rank() || previousPosition.second != file())
         never_moved = false;
 
-    dangeredPositions();
+    // dangeredPositions();
     return true;
 }
 
@@ -117,10 +117,10 @@ vecOfPairs KingFigure::dangeredPositions()
         row = file();
     }
 
-    for (auto d : dangeredPos)
-    {
-        qDebug() << "(" << d.first << ", " << d.second << ")";
-    }
+//    for (auto d : dangeredPos)
+//    {
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
 
     return dangeredPos;
 }

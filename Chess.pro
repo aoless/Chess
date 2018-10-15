@@ -35,8 +35,7 @@ SOURCES += \
     kingfigure.cpp \
     knightfigure.cpp \
     queenfigure.cpp \
-    rookfigure.cpp \
-    checkhandler.cpp
+    rookfigure.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -48,8 +47,7 @@ HEADERS += \
     kingfigure.h \
     knightfigure.h \
     queenfigure.h \
-    rookfigure.h \
-    checkhandler.h
+    rookfigure.h
 
 FORMS += \
         mainwindow.ui

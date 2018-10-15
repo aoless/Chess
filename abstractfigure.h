@@ -19,6 +19,7 @@ class AbstractFigure : public QObject, public QGraphicsRectItem
 private:
     MODE mode = unclicked;
     bool possible_to_click = false;
+    vecOfPairs dangeredFields_;
 protected:
     std::pair<int, int> previousPosition;   //col, row
     bool occupancy = false;
@@ -46,6 +47,7 @@ signals:
     void beatFigure(int col, int row, figureColors color);
     void castling(int rookCol, int rookRow, QString direction);
     void castlingBlocker(figureColors color);
+    void addDangeredFields();
 public slots:
     void setPosition(int col, int row);
     void canBeat(bool beat);

@@ -27,6 +27,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
         setZValue(0);
         possible_to_beat = false;
         changeStateOfPreviousPosition(rank(), file());
+        emit addDangeredFields();
     }
     else if (mode == unclicked && possible_to_click)
     {

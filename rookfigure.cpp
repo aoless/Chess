@@ -27,7 +27,7 @@ bool RookFigure::moveIsValid()
         emit beatFigure(rank(), file(), color);
 
     emit castlingBlocker(color);
-    dangeredPositions();
+    // dangeredPositions();
     return true;
 }
 
@@ -106,10 +106,10 @@ vecOfPairs RookFigure::dangeredPositions()
         row = file();
     }
 
-    for (auto d : dangeredPos)
-    {
-        qDebug() << "(" << d.first << ", " << d.second << ")";
-    }
+//    for (auto d : dangeredPos)
+//    {
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
 
     return dangeredPos;
 }

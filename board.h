@@ -10,6 +10,7 @@
 
 using AbstractFigureUniqueVec = std::vector<std::unique_ptr<AbstractFigure>>;
 using squareMatrix = std::array<std::array<Field*, 8>, 8>;
+using vecOfPairs = std::vector<std::pair<int, int>>;
 
 enum figureTypes { pawn, knight, bishop, rook, queen, king };
 
@@ -19,6 +20,8 @@ class Board: public QObject
 private:
     squareMatrix fields;
     std::map<std::string, AbstractFigureUniqueVec> figures;
+    vecOfPairs whiteAttackingFields_;
+    vecOfPairs blackAttackingFields_;
 public:
     Board();
     ~Board();
@@ -35,6 +38,7 @@ public:
     void addKingToBoard(QGraphicsScene*, const AbstractFigureUniqueVec&);
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
+    void checkIfChek();
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
@@ -43,6 +47,7 @@ public slots:
     void removePiece(int col, int row, figureColors color);
     void castlingHandler(int rookCol, int rookRow, QString direction);
     void disableCasting(figureColors color);
+    void addDangeredFields();
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);

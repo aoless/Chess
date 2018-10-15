@@ -40,7 +40,7 @@ bool PawnFigure::moveIsValid()
         else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
         {
             emit beatFigure(rank(), file(), color);
-            dangeredPositions();
+            // dangeredPositions();
             return true;
         }
         else
@@ -53,7 +53,7 @@ bool PawnFigure::moveIsValid()
        (file() == previousPosition.second - offset - begginingOffset)))
     {
         beggining = false;
-        dangeredPositions();
+        // dangeredPositions();
         return true;
     }
 
@@ -87,10 +87,10 @@ vecOfPairs PawnFigure::dangeredPositions()
     dangeredPos.emplace_back(rank() - step, file() - step);
 
 
-    for (auto d : dangeredPos)
-    {
-        qDebug() << "(" << d.first << ", " << d.second << ")";
-    }
+//    for (auto d : dangeredPos)
+//    {
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
 
     return dangeredPos;
 }
