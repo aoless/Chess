@@ -19,6 +19,7 @@ class AbstractFigure : public QObject, public QGraphicsRectItem
 private:
     MODE mode = unclicked;
     bool possible_to_click = false;
+    bool check_ = false;
     vecOfPairs dangeredFields_;
 protected:
     std::pair<int, int> previousPosition;   //col, row
@@ -35,6 +36,7 @@ public:
     void changeStateOfPreviousPosition(int x, int y);
     void changePossibilityToClick(bool possibility);
     bool isWhite() { return color == figureColors::white; }
+    bool isCheck() { return check_; }
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
     virtual vecOfPairs dangeredPositions() = 0;
@@ -43,6 +45,7 @@ signals:
     void propagateInfoOfDisabilityToMove(AbstractFigure* figure);
     void disableFiguresPickUp(bool state, figureColors color);
     void checkIfOtherFigureHasSamePosition(int col, int row, figureColors color);
+    void checkIfThereIsSomethingOnMyWay(int col, int row);
     void checkIfThereIsSomethingOnMyWay(int col, int row, figureColors color);
     void beatFigure(int col, int row, figureColors color);
     void castling(int rookCol, int rookRow, QString direction);
@@ -50,9 +53,10 @@ signals:
     void addDangeredFields();
 public slots:
     void setPosition(int col, int row);
-    void canBeat(bool beat);
+    void canBeat(bool beat, int col, int row);
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blocked);
+    void markCheck(bool check, figureColors color);
 };
 
 #endif // ABSTRACTFIGURE_H

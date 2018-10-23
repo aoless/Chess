@@ -23,11 +23,15 @@ bool RookFigure::moveIsValid()
     if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
         return false;
 
+    emit addDangeredFields();
+    if (isCheck())
+        return false;
+
     if (isItPossibleToBeat())
         emit beatFigure(rank(), file(), color);
 
     emit castlingBlocker(color);
-    // dangeredPositions();
+
     return true;
 }
 
@@ -44,6 +48,7 @@ bool RookFigure::thereIsOtherPieceOnField()
 
 bool RookFigure::isThereAnythingOnMyWay()
 {
+    qDebug() << "Ja tu wchodzę?";
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
@@ -69,7 +74,7 @@ bool RookFigure::isThereAnythingOnMyWay()
         colOffset = 0; rowOffset = 100;
     }
 
-    for (col = previousPosition.first, row = previousPosition.second; col != rank() && row != file();
+    for (col = previousPosition.first, row = previousPosition.second; col != rank() || row != file();
          col += colOffset, row += rowOffset)
     {
         emit checkIfThereIsSomethingOnMyWay(col, row, color);
@@ -92,10 +97,12 @@ vecOfPairs RookFigure::dangeredPositions()
 
     for (auto pD : possibleDirections)
     {
-        while((col < 700 && col > 0) && (row < 700 && row > 0))
+        while(true)
         {
             col += pD.first; row += pD.second;
-            emit checkIfThereIsSomethingOnMyWay(col, row, color);
+            emit checkIfThereIsSomethingOnMyWay(col, row);
+            if (col < 0 || col > 700 || row < 0 || row > 700)
+                break;
             dangeredPos.emplace_back(col, row);
             if (blocked_by_piece)
                 break;

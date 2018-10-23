@@ -23,6 +23,10 @@ bool QueenFigure::moveIsValid()
     if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
         return false;
 
+    emit addDangeredFields();
+    if (isCheck())
+        return false;
+
     if (isItPossibleToBeat())
         emit beatFigure(rank(), file(), color);
 
@@ -97,6 +101,10 @@ bool QueenFigure::isThereAnythingOnMyWay()
 
 vecOfPairs QueenFigure::dangeredPositions()
 {
+//    if (isWhite())
+//        qDebug() << "Biała";
+//    else
+//        qDebug() << "Ciorna";
     vecOfPairs dangeredPos;
     vecOfPairs possibleDirections;
 
@@ -107,10 +115,12 @@ vecOfPairs QueenFigure::dangeredPositions()
 
     for (auto pD : possibleDirections)
     {
-        while((col < 700 && col > 0) && (row < 700 && row > 0))
+        while(true)
         {
             col += pD.first; row += pD.second;
-            emit checkIfThereIsSomethingOnMyWay(col, row, color);
+            emit checkIfThereIsSomethingOnMyWay(col, row);
+            if (col < 0 || col > 700 || row < 0 || row > 700)
+                break;
             dangeredPos.emplace_back(col, row);
             if (blocked_by_piece)
                 break;

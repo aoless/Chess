@@ -23,10 +23,16 @@ bool BishopFigure::moveIsValid()
     if (rowOffset != int(std::abs(x() - previousPosition.first)))
         return false;
 
-    if (isItPossibleToBeat())
-        emit beatFigure(rank(), file(), color);
+    emit addDangeredFields();
+    if (isCheck())
+        return false;
 
-    // dangeredPositions();
+    if (isItPossibleToBeat())
+    {
+        qDebug() << "Moge bic";
+        emit beatFigure(rank(), file(), color);
+    }
+
     return true;
 }
 
@@ -92,11 +98,13 @@ vecOfPairs BishopFigure::dangeredPositions()
 
     for (auto pD : possibleDirections)
     {
-        while((col < 700 && col > 0) && (row < 700 && row > 0))
+        while(true)
         {
             col += pD.first;
             row += pD.second;
-            emit checkIfThereIsSomethingOnMyWay(col, row, color);
+            emit checkIfThereIsSomethingOnMyWay(col, row);
+            if (col < 0 || col > 700 || row < 0 || row > 700)
+                break;
             dangeredPos.emplace_back(col, row);
             if (blocked_by_piece)
                 break;

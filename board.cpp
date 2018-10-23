@@ -213,32 +213,13 @@ void Board::setUpFigureOnScene(QGraphicsScene* scene, AbstractFigure* figure, st
     connecter(figure);
 }
 
-void Board::checkIfChek()
-{
-    for (auto& piece : figures)
-    {
-        for (auto& p : piece.second)
-        {
-                if (piece.first == "King")
-                {
-                    auto it = std::find(whiteAttackingFields_.begin(), whiteAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
-                    if (it != whiteAttackingFields_.end())
-                        qDebug() << "BLACK in CHECK!";
-
-                    it = std::find(blackAttackingFields_.begin(), blackAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
-                    if (it != blackAttackingFields_.end())
-                        qDebug() << "WHITE in CHECK!";
-                }
-        }
-    }
-}
-
 void Board::connecter(const AbstractFigure* figure)
 {
     connect(figure, SIGNAL(propagateInfoOfAbilityToMove(AbstractFigure*)), this, SLOT(enableToMoveFigure(AbstractFigure*)));
     connect(figure, SIGNAL(propagateInfoOfDisabilityToMove(AbstractFigure*)), this, SLOT(refuseToMoveFigure(AbstractFigure*)));
     connect(figure, SIGNAL(disableFiguresPickUp(bool,figureColors)), this, SLOT(disableFiguresPickUp(bool,figureColors)));
     connect(figure, SIGNAL(checkIfOtherFigureHasSamePosition(int,int,figureColors)), this, SLOT(checkIfThereIsFewFiguresOnSameField(int,int,figureColors)));
+    connect(figure, SIGNAL(checkIfThereIsSomethingOnMyWay(int,int)), this, SLOT(propagateSignalUnitlItMeetsFigure(int,int)));
     connect(figure, SIGNAL(checkIfThereIsSomethingOnMyWay(int,int,figureColors)), this, SLOT(checkIfThereIsFewFiguresOnSameField(int,int,figureColors)));
     connect(figure, SIGNAL(beatFigure(int,int,figureColors)), this, SLOT(removePiece(int,int,figureColors)));
     connect(figure, SIGNAL(castling(int,int,QString)), this, SLOT(castlingHandler(int,int,QString)));
@@ -246,7 +227,8 @@ void Board::connecter(const AbstractFigure* figure)
     connect(figure, SIGNAL(addDangeredFields()), this, SLOT(addDangeredFields()));
     connect(this, SIGNAL(fieldIsOccupied(bool)), figure, SLOT(fieldIsOccupied(bool)));
     connect(this, SIGNAL(thereIsSomethingOnTheWay(bool)), figure, SLOT(thereIsSomethingOnTheWay(bool)));
-    connect(this, SIGNAL(canBeat(bool)), figure, SLOT(canBeat(bool)));
+    connect(this, SIGNAL(canBeat(bool, int, int)), figure, SLOT(canBeat(bool, int, int)));
+    connect(this, SIGNAL(isCheck(bool, figureColors)), figure, SLOT(markCheck(bool, figureColors)));
 }
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
@@ -310,13 +292,93 @@ void Board::addDangeredFields()
     whiteAttackingFields_.clear();
     blackAttackingFields_.clear();
     for (const auto& piece : figures)
+    {
         for (const auto& p : piece.second)
         {
             temp = p->dangeredPositions();
             p->isWhite() ? whiteAttackingFields_.insert(whiteAttackingFields_.end(), temp.begin(), temp.end()) :
                 blackAttackingFields_.insert(blackAttackingFields_.end(), temp.begin(), temp.end());
         }
+    }
+
+//    qDebug() << "Biołe";
+//    for (auto d : whiteAttackingFields_)
+//    {
+//        if (d.first == 400 && d.second == 0)
+//            qDebug() << "Mam kurwa krula";
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
+
+//    qDebug() << "Ciorne";
+//    for (auto d : blackAttackingFields_)
+//    {
+//        qDebug() << "(" << d.first << ", " << d.second << ")";
+//    }
+
     checkIfChek();
+}
+
+void Board::checkIfChek()
+{
+    //  qDebug() << "Tu wchodze i powinienem za każdym ruchem";
+    vecOfPairs::iterator it;
+    for (auto& piece : figures)
+    {
+        for (auto& p : piece.second)
+        {
+            if (piece.first == "King")
+            {
+                switch (p->color)
+                {
+                case figureColors::white:
+                    it = std::find(blackAttackingFields_.begin(), blackAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
+                    if (it != blackAttackingFields_.end())
+                    {
+                        qDebug() << "WHITE in CHECK!";
+                        emit isCheck(true, figureColors::white);
+                    }
+                    else
+                    {
+                        // qDebug() << "Białe już nie mają szacha";
+                        emit isCheck(false, figureColors::white);
+                    }
+                    break;
+                case figureColors::black:
+                    it = std::find(whiteAttackingFields_.begin(), whiteAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
+                    if (it != whiteAttackingFields_.end())
+                    {
+                        qDebug() << "BLACK in CHECK!";
+                        emit isCheck(true, figureColors::black);
+                    }
+                    else
+                    {
+                        // qDebug() << "Czarne już nie mają szacha";
+                        emit isCheck(false, figureColors::black);
+                    }
+                    break;
+
+                }
+            }
+        }
+    }
+}
+
+void Board::propagateSignalUnitlItMeetsFigure(int col, int row)
+{
+    int counter = 0;
+    for (auto& piece : figures)
+    {
+        for (auto& p : piece.second)
+        {
+            if (p->rank() == col && p->file() == row)
+            {
+                counter++;
+            }
+        }
+    }
+
+    emit fieldIsOccupied(counter > 1);
+    emit thereIsSomethingOnTheWay(counter == 1);
 }
 
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)
@@ -330,7 +392,7 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
             {
                 counter++;
                 if (p->color != color && piece.first != "King")
-                    emit canBeat(true);
+                    emit canBeat(true, col, row);
             }
         }
     }

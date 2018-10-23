@@ -60,7 +60,7 @@ bool KingFigure::moveIsValid()
 
 bool KingFigure::isItPossibleToBeat()
 {
-    return false;
+    return possible_to_beat;
 }
 
 bool KingFigure::thereIsOtherPieceOnField()
@@ -71,6 +71,10 @@ bool KingFigure::thereIsOtherPieceOnField()
 
 bool KingFigure::isThereAnythingOnMyWay()
 {
+    emit addDangeredFields();
+    if (isCheck())
+        return false;
+
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;

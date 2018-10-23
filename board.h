@@ -48,10 +48,12 @@ public slots:
     void castlingHandler(int rookCol, int rookRow, QString direction);
     void disableCasting(figureColors color);
     void addDangeredFields();
+    void propagateSignalUnitlItMeetsFigure(int col, int row);
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);
-    void canBeat(bool possibility);
+    void canBeat(bool possibility, int col, int row);
+    void isCheck(bool check, figureColors color);
 };
 
 #endif // BOARD_H

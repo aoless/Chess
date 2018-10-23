@@ -26,11 +26,19 @@ bool PawnFigure::moveIsValid()
     if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
         return false;
 
+    emit addDangeredFields();
+    if (isCheck())
+    {
+        qDebug() << "JEST SZACH KURWA";
+        return false;
+    }
+
     int colOffset = std::abs(rank() - previousPosition.first);
     int rowOffset = file() - previousPosition.second;
 
     if (isItPossibleToBeat())
     {
+        qDebug() << "Wchodzę mimo iż niepowinienem";
         if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
         {
             emit beatFigure(rank(), file(), color);
@@ -56,6 +64,8 @@ bool PawnFigure::moveIsValid()
         // dangeredPositions();
         return true;
     }
+
+    qDebug() << "3";
 
     return false;
 }

@@ -11,6 +11,7 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
     {
         emit propagateInfoOfDisabilityToMove(this);
         mode = unclicked;
+
         if (!moveIsValid())
             setPosition(previousPosition.first, previousPosition.second);
 
@@ -27,7 +28,6 @@ void AbstractFigure::mousePressEvent(QGraphicsSceneMouseEvent*)
         setZValue(0);
         possible_to_beat = false;
         changeStateOfPreviousPosition(rank(), file());
-        emit addDangeredFields();
     }
     else if (mode == unclicked && possible_to_click)
     {
@@ -59,12 +59,19 @@ void AbstractFigure::thereIsSomethingOnTheWay(bool blocked)
     blocked_by_piece = blocked;
 }
 
+void AbstractFigure::markCheck(bool check, figureColors color)
+{
+    if (this->color == color)
+        check_ = check;
+}
+
 void AbstractFigure::setPosition(int col, int row)
 {
     setPos(col, row);
 }
 
-void AbstractFigure::canBeat(bool beat)
+void AbstractFigure::canBeat(bool beat, int col, int row)
 {
-    possible_to_beat = beat;
+    if (rank() == col && file() == row)
+        possible_to_beat = beat;
 }

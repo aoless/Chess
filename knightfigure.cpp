@@ -25,15 +25,18 @@ bool KnightFigure::moveIsValid()
         if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
             return false;
 
+        emit addDangeredFields();
+        if (isCheck())
+            return false;
+
         if (isItPossibleToBeat())
             beatFigure(rank(), file(), color);
 
+        return true;
     }
-    else
-        return false;
 
-    // dangeredPositions();
-    return true;
+    return false;
+
 }
 
 bool KnightFigure::isItPossibleToBeat()
