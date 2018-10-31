@@ -22,7 +22,6 @@ private:
     bool check_ = false;
     vecOfPairs dangeredFields_;
 protected:
-    std::pair<int, int> previousPosition;   //col, row
     bool occupancy = false;
     bool blocked_by_piece = false;
     bool possible_to_beat = false;
@@ -30,13 +29,15 @@ public:
     explicit AbstractFigure(QObject *parent = nullptr);
     int rank() { return int(x()); }    // col
     int file() { return int(y()); }    // row
+    std::pair<int, int> previousPosition;   //col, row
     figureColors color;
     bool never_moved = true;
-    void mousePressEvent(QGraphicsSceneMouseEvent*);
+    void mousePressEvent(QGraphicsSceneMouseEvent* = nullptr);
     void changeStateOfPreviousPosition(int x, int y);
     void changePossibilityToClick(bool possibility);
     bool isWhite() { return color == figureColors::white; }
     bool isCheck() { return check_; }
+    virtual bool dupa(int col, int row) = 0;
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
     virtual vecOfPairs dangeredPositions() = 0;

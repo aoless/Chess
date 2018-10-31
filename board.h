@@ -49,6 +49,7 @@ public slots:
     void disableCasting(figureColors color);
     void addDangeredFields();
     void propagateSignalUnitlItMeetsFigure(int col, int row);
+    void chekIfCheckMate(figureColors color);
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);

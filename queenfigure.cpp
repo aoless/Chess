@@ -24,11 +24,14 @@ bool QueenFigure::moveIsValid()
         return false;
 
     emit addDangeredFields();
-    if (isCheck())
+    if (isCheck())      // problem z kolejnością, nie ma możliwości zbicia grożącego pionka
         return false;
 
     if (isItPossibleToBeat())
+    {
+
         emit beatFigure(rank(), file(), color);
+    }
 
     // dangeredPositions();
     return true;
@@ -101,10 +104,6 @@ bool QueenFigure::isThereAnythingOnMyWay()
 
 vecOfPairs QueenFigure::dangeredPositions()
 {
-//    if (isWhite())
-//        qDebug() << "Biała";
-//    else
-//        qDebug() << "Ciorna";
     vecOfPairs dangeredPos;
     vecOfPairs possibleDirections;
 

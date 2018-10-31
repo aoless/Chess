@@ -29,7 +29,6 @@ bool PawnFigure::moveIsValid()
     emit addDangeredFields();
     if (isCheck())
     {
-        qDebug() << "JEST SZACH KURWA";
         return false;
     }
 

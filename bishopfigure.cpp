@@ -23,15 +23,15 @@ bool BishopFigure::moveIsValid()
     if (rowOffset != int(std::abs(x() - previousPosition.first)))
         return false;
 
-    emit addDangeredFields();
-    if (isCheck())
-        return false;
 
     if (isItPossibleToBeat())
     {
-        qDebug() << "Moge bic";
         emit beatFigure(rank(), file(), color);
     }
+
+    emit addDangeredFields();
+    if (isCheck())
+        return false;
 
     return true;
 }

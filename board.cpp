@@ -9,6 +9,16 @@
 #include "queenfigure.h"
 #include "kingfigure.h"
 
+#include <QTime>
+#include <QCoreApplication>
+
+void delay()
+{
+    QTime dieTime= QTime::currentTime().addSecs(1);
+    while (QTime::currentTime() < dieTime)
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
+}
+
 Board::Board()
 {
     for (int i = 0; i < 8; i++)
@@ -257,7 +267,6 @@ void Board::disableFiguresPickUp(bool state, figureColors color)
 
 void Board::castlingHandler(int rookCol, int rookRow, QString direction)
 {
-    qDebug() << rookCol << " " << rookRow;
     int offset{};
 
     if (direction == "left")
@@ -301,20 +310,6 @@ void Board::addDangeredFields()
         }
     }
 
-//    qDebug() << "Biołe";
-//    for (auto d : whiteAttackingFields_)
-//    {
-//        if (d.first == 400 && d.second == 0)
-//            qDebug() << "Mam kurwa krula";
-//        qDebug() << "(" << d.first << ", " << d.second << ")";
-//    }
-
-//    qDebug() << "Ciorne";
-//    for (auto d : blackAttackingFields_)
-//    {
-//        qDebug() << "(" << d.first << ", " << d.second << ")";
-//    }
-
     checkIfChek();
 }
 
@@ -335,11 +330,11 @@ void Board::checkIfChek()
                     if (it != blackAttackingFields_.end())
                     {
                         qDebug() << "WHITE in CHECK!";
+                        chekIfCheckMate(figureColors::white);
                         emit isCheck(true, figureColors::white);
                     }
                     else
                     {
-                        // qDebug() << "Białe już nie mają szacha";
                         emit isCheck(false, figureColors::white);
                     }
                     break;
@@ -348,11 +343,11 @@ void Board::checkIfChek()
                     if (it != whiteAttackingFields_.end())
                     {
                         qDebug() << "BLACK in CHECK!";
+                        chekIfCheckMate(figureColors::black);
                         emit isCheck(true, figureColors::black);
                     }
                     else
                     {
-                        // qDebug() << "Czarne już nie mają szacha";
                         emit isCheck(false, figureColors::black);
                     }
                     break;
@@ -379,6 +374,58 @@ void Board::propagateSignalUnitlItMeetsFigure(int col, int row)
 
     emit fieldIsOccupied(counter > 1);
     emit thereIsSomethingOnTheWay(counter == 1);
+}
+
+void Board::chekIfCheckMate(figureColors color)
+{
+    qDebug() << "===============";
+    const auto& king = std::find_if(figures["King"].begin(), figures["King"].end(),
+        [color](const auto& k) { return k->color == color; });
+
+    vecOfPairs possibleDirections = { std::make_pair(100, 0), std::make_pair(100, 100),
+                                      std::make_pair(0, 100), std::make_pair(-100, 100),
+                                      std::make_pair(-100, 0), std::make_pair(-100, -100),
+                                      std::make_pair(0, -100), std::make_pair(100, -100) };
+
+    int orginalRank = (*king)->rank();
+    int orginalFile = (*king)->file();
+
+    vecOfPairs badMoves;
+    vecOfPairs goodMoves;
+
+    if (color == figureColors::white)
+    {
+        badMoves = blackAttackingFields_;
+    }
+    else
+    {
+        badMoves = whiteAttackingFields_;
+    }
+
+    for (const auto& direction: possibleDirections)
+    {
+        int newRank = orginalRank + direction.first;
+        int newFile = orginalFile + direction.second;
+
+        if (newRank < 0 || newRank > 700 || newFile < 0 || newFile > 700)
+            continue;
+
+        if ((*king)->dupa(newRank, newFile))
+            goodMoves.push_back(std::make_pair(newRank, newFile));
+    }
+
+
+    for (auto g : goodMoves)
+    {
+        if (std::find(badMoves.begin(), badMoves.end(), g) == badMoves.end())
+        {
+            qDebug() << "Pole " << g.first << ", " << g.second << " nie jest niczym zagrożone";
+        }
+        else
+        {
+            qDebug() << "Pole " << g.first << ", " << g.second << " odpada";
+        }
+    }
 }
 
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)

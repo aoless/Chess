@@ -17,6 +17,10 @@ bool KingFigure::moveIsValid()
     if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
         return false;
 
+    emit addDangeredFields();
+    if (isCheck())
+        return false;
+
     if(isItPossibleToBeat())
         emit beatFigure(rank(), file(), color);
 
@@ -56,6 +60,22 @@ bool KingFigure::moveIsValid()
 
     // dangeredPositions();
     return true;
+}
+
+bool KingFigure::dupa(int col, int row)
+{
+    emit checkIfOtherFigureHasSamePosition(col, row, color);
+    if (blocked_by_piece && !isItPossibleToBeat())
+    {
+        blocked_by_piece = false;
+        return false;
+    }
+
+    if (isItPossibleToBeat())
+        return true;
+
+    return true;
+
 }
 
 bool KingFigure::isItPossibleToBeat()
