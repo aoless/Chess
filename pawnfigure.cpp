@@ -37,7 +37,6 @@ bool PawnFigure::moveIsValid()
 
     if (isItPossibleToBeat())
     {
-        qDebug() << "Wchodzę mimo iż niepowinienem";
         if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
         {
             emit beatFigure(rank(), file(), color);
@@ -60,11 +59,10 @@ bool PawnFigure::moveIsValid()
        (file() == previousPosition.second - offset - begginingOffset)))
     {
         beggining = false;
+        // possibleMoves()
         // dangeredPositions();
         return true;
     }
-
-    qDebug() << "3";
 
     return false;
 }
@@ -102,4 +100,21 @@ vecOfPairs PawnFigure::dangeredPositions()
 //    }
 
     return dangeredPos;
+}
+
+vecOfPairs PawnFigure::possibleMoves()
+{
+    vecOfPairs possibleMovesVec;
+    int step = 100;
+    if (!isWhite())
+        step = -step;
+
+    if (isItBegginingOfGame())
+    {
+        possibleMovesVec.emplace_back(rank() + step * 2, file());
+    }
+
+    possibleMovesVec.emplace_back(rank() + step, file());
+
+    return possibleMovesVec;
 }

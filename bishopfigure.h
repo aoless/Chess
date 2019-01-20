@@ -13,6 +13,7 @@ public:
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
     vecOfPairs dangeredPositions();
+    vecOfPairs possibleMoves();
 
 signals:
 

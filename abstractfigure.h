@@ -41,6 +41,7 @@ public:
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
     virtual vecOfPairs dangeredPositions() = 0;
+    virtual vecOfPairs possibleMoves() = 0;
 signals:
     void propagateInfoOfAbilityToMove(AbstractFigure* figure);
     void propagateInfoOfDisabilityToMove(AbstractFigure* figure);

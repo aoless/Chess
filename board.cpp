@@ -392,6 +392,8 @@ void Board::chekIfCheckMate(figureColors color)
 
     vecOfPairs badMoves;
     vecOfPairs goodMoves;
+    vecOfPairs kingSavingPositions;
+    vecOfPairs evenMoreSaving;
 
     if (color == figureColors::white)
     {
@@ -420,10 +422,30 @@ void Board::chekIfCheckMate(figureColors color)
         if (std::find(badMoves.begin(), badMoves.end(), g) == badMoves.end())
         {
             qDebug() << "Pole " << g.first << ", " << g.second << " nie jest niczym zagrożone";
+            // check if any piece can go to that field
         }
         else
         {
             qDebug() << "Pole " << g.first << ", " << g.second << " odpada";
+            for (auto& piece : figures)
+            {
+                for (auto& p : piece.second)
+                {
+                    if (p->color == color && piece.first != "King")
+                    {
+                        auto temp = p->possibleMoves();
+                        kingSavingPositions.insert(kingSavingPositions.end(), temp.begin(), temp.end());
+                    }
+                }
+            }
+            if (std::find(kingSavingPositions.begin(), kingSavingPositions.end(), g) != kingSavingPositions.end())
+            {
+                evenMoreSaving.emplace_back(g);
+            }
+            for (auto& eMS : evenMoreSaving)
+            {
+                qDebug() << "King can be saved by: " << eMS.first << ", " << eMS.second;
+            }
         }
     }
 }

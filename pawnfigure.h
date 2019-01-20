@@ -15,6 +15,7 @@ public:
     bool isItBegginingOfGame();
     bool thereIsOtherPieceOnField();
     vecOfPairs dangeredPositions();
+    vecOfPairs possibleMoves();
 };
 
 #endif // PAWNFIGURE_H

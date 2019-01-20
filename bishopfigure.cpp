@@ -122,3 +122,15 @@ vecOfPairs BishopFigure::dangeredPositions()
 
     return dangeredPos;
 }
+
+vecOfPairs BishopFigure::possibleMoves()
+{
+    vecOfPairs possibleMovesVec;
+    int step = 100;
+    if (!isWhite())
+        step = -step;
+
+    possibleMovesVec.emplace_back(rank() + step, file());
+
+    return possibleMovesVec;
+}

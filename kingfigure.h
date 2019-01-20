@@ -16,6 +16,7 @@ public:
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
     vecOfPairs dangeredPositions();
+    vecOfPairs possibleMoves();
 };
 
 #endif // KINGFIGURE_H
