@@ -140,12 +140,5 @@ vecOfPairs QueenFigure::dangeredPositions()
 
 vecOfPairs QueenFigure::possibleMoves()
 {
-    vecOfPairs possibleMovesVec;
-    int step = 100;
-    if (!isWhite())
-        step = -step;
-
-    possibleMovesVec.emplace_back(rank() + step, file());
-
-    return possibleMovesVec;
+    return dangeredPositions();
 }

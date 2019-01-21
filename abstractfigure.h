@@ -37,7 +37,7 @@ public:
     void changePossibilityToClick(bool possibility);
     bool isWhite() { return color == figureColors::white; }
     bool isCheck() { return check_; }
-    virtual bool dupa(int col, int row) = 0;
+    virtual bool moveIsValidWrapper(int col, int row) = 0;
     virtual bool moveIsValid() = 0;
     virtual bool isItPossibleToBeat() = 0;
     virtual vecOfPairs dangeredPositions() = 0;

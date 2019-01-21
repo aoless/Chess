@@ -11,7 +11,7 @@ private:
 public:
     explicit KingFigure(figureColors type);
     bool moveIsValid();
-    bool dupa(int col, int row);
+    bool moveIsValidWrapper(int col, int row);
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();

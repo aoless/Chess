@@ -62,7 +62,7 @@ bool KingFigure::moveIsValid()
     return true;
 }
 
-bool KingFigure::dupa(int col, int row)
+bool KingFigure::moveIsValidWrapper(int col, int row)
 {
     emit checkIfOtherFigureHasSamePosition(col, row, color);
     if (blocked_by_piece && !isItPossibleToBeat())

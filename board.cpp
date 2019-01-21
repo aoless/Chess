@@ -412,39 +412,40 @@ void Board::chekIfCheckMate(figureColors color)
         if (newRank < 0 || newRank > 700 || newFile < 0 || newFile > 700)
             continue;
 
-        if ((*king)->dupa(newRank, newFile))
+        if ((*king)->moveIsValidWrapper(newRank, newFile))
             goodMoves.push_back(std::make_pair(newRank, newFile));
     }
 
 
-    for (auto g : goodMoves)
+    for (auto goodMove : goodMoves)
     {
-        if (std::find(badMoves.begin(), badMoves.end(), g) == badMoves.end())
+        if (std::find(badMoves.begin(), badMoves.end(), goodMove) == badMoves.end())
         {
-            qDebug() << "Pole " << g.first << ", " << g.second << " nie jest niczym zagrożone";
+            qDebug() << "Pole " << goodMove.first << ", " << goodMove.second << " nie jest niczym zagrożone";
             // check if any piece can go to that field
         }
         else
         {
-            qDebug() << "Pole " << g.first << ", " << g.second << " odpada";
+            qDebug() << "Pole " << goodMove.first << ", " << goodMove.second << " odpada";
             for (auto& piece : figures)
             {
                 for (auto& p : piece.second)
                 {
                     if (p->color == color && piece.first != "King")
                     {
-                        auto temp = p->possibleMoves();
+                        auto temp = p->dangeredPositions();
                         kingSavingPositions.insert(kingSavingPositions.end(), temp.begin(), temp.end());
                     }
                 }
             }
-            if (std::find(kingSavingPositions.begin(), kingSavingPositions.end(), g) != kingSavingPositions.end())
+            if (std::find(kingSavingPositions.begin(), kingSavingPositions.end(), goodMove) != kingSavingPositions.end())
             {
-                evenMoreSaving.emplace_back(g);
+                evenMoreSaving.emplace_back(goodMove);
             }
             for (auto& eMS : evenMoreSaving)
             {
-                qDebug() << "King can be saved by: " << eMS.first << ", " << eMS.second;
+                if (std::find(badMoves.begin(), badMoves.end(), eMS) != badMoves.end())
+                    qDebug() << "King can be saved by: " << eMS.first << ", " << eMS.second;
             }
         }
     }

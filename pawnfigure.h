@@ -9,7 +9,7 @@ private:
     bool beggining = true;
 public:
     explicit PawnFigure(figureColors type);
-    bool dupa(int col, int row) { return moveIsValid(); }
+    bool moveIsValidWrapper(int col, int row) { return moveIsValid(); }
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool isItBegginingOfGame();

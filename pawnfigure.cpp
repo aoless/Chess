@@ -104,17 +104,5 @@ vecOfPairs PawnFigure::dangeredPositions()
 
 vecOfPairs PawnFigure::possibleMoves()
 {
-    vecOfPairs possibleMovesVec;
-    int step = 100;
-    if (!isWhite())
-        step = -step;
-
-    if (isItBegginingOfGame())
-    {
-        possibleMovesVec.emplace_back(rank() + step * 2, file());
-    }
-
-    possibleMovesVec.emplace_back(rank() + step, file());
-
-    return possibleMovesVec;
+    return dangeredPositions();
 }
