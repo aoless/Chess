@@ -36,6 +36,22 @@ bool BishopFigure::moveIsValid()
     return true;
 }
 
+bool BishopFigure::moveIsValidWrapper(int col, int row)
+{
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
+        return false;
+
+    int rowOffset = int(std::abs(row - previousPosition.second));
+
+    if (rowOffset != int(std::abs(col - previousPosition.first)))
+        return false;
+
+    if (isCheck())
+        return false;
+
+    return true;
+}
+
 bool BishopFigure::isItPossibleToBeat()
 {
     return possible_to_beat;

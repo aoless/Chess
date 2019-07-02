@@ -140,12 +140,6 @@ vecOfPairs KingFigure::dangeredPositions()
         col = rank();
         row = file();
     }
-
-//    for (auto d : dangeredPos)
-//    {
-//        qDebug() << "(" << d.first << ", " << d.second << ")";
-//    }
-
     return dangeredPos;
 }
 

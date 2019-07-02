@@ -46,7 +46,6 @@ bool PawnFigure::moveIsValid()
         else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
         {
             emit beatFigure(rank(), file(), color);
-            // dangeredPositions();
             return true;
         }
         else
@@ -65,6 +64,29 @@ bool PawnFigure::moveIsValid()
     }
 
     return false;
+}
+
+bool PawnFigure::moveIsValidWrapper(int col, int row)
+{
+    int colOffset = std::abs(col - previousPosition.first);
+    int rowOffset = row - previousPosition.second;
+
+    if (colOffset == 100 && rowOffset == -100 && color == figureColors::white)
+    {
+        emit beatFigure(rank(), file(), color);
+        dangeredPositions();
+        return true;
+    }
+    else if (colOffset == 100 && rowOffset == 100 && color == figureColors::black)
+    {
+        emit beatFigure(rank(), file(), color);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+
 }
 
 bool PawnFigure::isItPossibleToBeat()

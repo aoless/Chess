@@ -59,7 +59,7 @@ void Board::drawChessBoard(QGraphicsScene *scene)
     }
 }
 
-void Board::createFigure(figureTypes type, figureColors color)
+void Board::createFigure(figureTypes type, figureColors color) // can be factory method!
 {
     // QObject class has deleted move constructor, that's why we use new instead make_shared<>
     switch(type)
@@ -243,15 +243,15 @@ void Board::connecter(const AbstractFigure* figure)
 
 void Board::enableToMoveFigure(AbstractFigure* figure)
 {
-    for (int i = 0; i < 8; i++)
-        for (int j = 0; j < 8; j++)
+    for (unsigned long long i = 0; i < 8; i++)
+        for (unsigned long long j = 0; j < 8; j++)
             connect(fields[i][j], SIGNAL(sendCoordinates(int,int)), figure, SLOT(setPosition(int, int)));
 }
 
 void Board::refuseToMoveFigure(AbstractFigure* figure)
 {
-    for (int i = 0; i < 8; i++)
-        for (int j = 0; j < 8; j++)
+    for (unsigned long long i = 0; i < 8; i++)
+        for (unsigned long long j = 0; j < 8; j++)
             disconnect(fields[i][j], SIGNAL(sendCoordinates(int,int)), figure, SLOT(setPosition(int, int)));
 }
 
@@ -310,12 +310,11 @@ void Board::addDangeredFields()
         }
     }
 
-    checkIfChek();
+    lookForAKingAndCheckIfHeIsInCheck();
 }
 
-void Board::checkIfChek()
+void Board::lookForAKingAndCheckIfHeIsInCheck()
 {
-    //  qDebug() << "Tu wchodze i powinienem za każdym ruchem";
     vecOfPairs::iterator it;
     for (auto& piece : figures)
     {
@@ -326,11 +325,12 @@ void Board::checkIfChek()
                 switch (p->color)
                 {
                 case figureColors::white:
-                    it = std::find(blackAttackingFields_.begin(), blackAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
+                    it = std::find(blackAttackingFields_.begin(), blackAttackingFields_.end(),
+                         std::make_pair(p->rank(), p->file()));
                     if (it != blackAttackingFields_.end())
                     {
                         qDebug() << "WHITE in CHECK!";
-                        chekIfCheckMate(figureColors::white);
+                        chekIfCheckMate(p.get());
                         emit isCheck(true, figureColors::white);
                     }
                     else
@@ -339,11 +339,12 @@ void Board::checkIfChek()
                     }
                     break;
                 case figureColors::black:
-                    it = std::find(whiteAttackingFields_.begin(), whiteAttackingFields_.end(), std::make_pair(p->rank(), p->file()));
+                    it = std::find(whiteAttackingFields_.begin(), whiteAttackingFields_.end(),
+                         std::make_pair(p->rank(), p->file()));
                     if (it != whiteAttackingFields_.end())
                     {
                         qDebug() << "BLACK in CHECK!";
-                        chekIfCheckMate(figureColors::black);
+                        chekIfCheckMate(p.get());
                         emit isCheck(true, figureColors::black);
                     }
                     else
@@ -351,10 +352,92 @@ void Board::checkIfChek()
                         emit isCheck(false, figureColors::black);
                     }
                     break;
-
                 }
             }
         }
+    }
+}
+
+void Board::chekIfCheckMate(AbstractFigure* king)
+{
+    qDebug() << "===============";
+
+    vecOfPairs possibleDirections = { std::make_pair(100, 0), std::make_pair(100, 100),
+                                      std::make_pair(0, 100), std::make_pair(-100, 100),
+                                      std::make_pair(-100, 0), std::make_pair(-100, -100),
+                                      std::make_pair(0, -100), std::make_pair(100, -100) };
+
+    int orginalRank = king->rank();
+    int orginalFile = king->file();
+
+    vecOfPairs attackingFields;
+    vecOfPairs safeMoves;
+    vecOfPairs kingSavingPositions;
+    vecOfPairs evenMoreSaving;
+
+    if (king->isWhite())
+    {
+        attackingFields = blackAttackingFields_;
+    }
+    else
+    {
+        attackingFields = whiteAttackingFields_;
+    }
+
+    for (const auto& direction: possibleDirections)
+    {
+        int newRank = orginalRank + direction.first;
+        int newFile = orginalFile + direction.second;
+
+        if (newRank < 0 || newRank > 700 || newFile < 0 || newFile > 700)
+            continue;
+
+        if (king->moveIsValidWrapper(newRank, newFile))
+            safeMoves.push_back(std::make_pair(newRank, newFile));
+    }
+
+
+    for (auto safeMove : safeMoves)
+    {
+        if (std::find(attackingFields.begin(), attackingFields.end(), safeMove) == attackingFields.end())
+        {
+            qDebug() << "Pole " << safeMove.first << ", " << safeMove.second << " nie jest niczym zagrożone";
+            // check if any piece can go to that field
+        }
+        else
+        {
+            qDebug() << "Pole " << safeMove.first << ", " << safeMove.second << " odpada";
+        }
+    }
+
+
+//                for (auto t : temp)
+//                {
+//                    if (p->moveIsValidWrapper(t.first, t.second) && // jesli ruch jest mozliwy
+//                            std::find(attackingFields.begin(), attackingFields.end(),
+//                                std::pair<int, int>(t.first, t.second)) != attackingFields.end())   // i znajduje sie wsrod zagrozonych pozycji
+//                        kingSavingPositions.emplace_back(t.first, t.second);    // moze uratowac krola
+//                }
+
+    for (auto kSP : kingSavingPositions)
+    {
+        vecOfPairs::iterator it;
+        it = std::find(whiteAttackingFields_.begin(), whiteAttackingFields_.end(), std::make_pair(kSP.first, kSP.second));
+        if (it != whiteAttackingFields_.end())
+        {
+            evenMoreSaving.emplace_back(kSP.first, kSP.second);
+        }
+    }
+
+//    for badMoves
+
+//    if (std::find(kingSavingPositions.begin(), kingSavingPositions.end(), b) != kingSavingPositions.end())
+//    {
+//        evenMoreSaving.emplace_back(safeMove);
+//    }
+    for (auto& eMS : evenMoreSaving)
+    {
+        qDebug() << "King can be saved by: " << eMS.first << ", " << eMS.second;
     }
 }
 
@@ -376,80 +459,6 @@ void Board::propagateSignalUnitlItMeetsFigure(int col, int row)
     emit thereIsSomethingOnTheWay(counter == 1);
 }
 
-void Board::chekIfCheckMate(figureColors color)
-{
-    qDebug() << "===============";
-    const auto& king = std::find_if(figures["King"].begin(), figures["King"].end(),
-        [color](const auto& k) { return k->color == color; });
-
-    vecOfPairs possibleDirections = { std::make_pair(100, 0), std::make_pair(100, 100),
-                                      std::make_pair(0, 100), std::make_pair(-100, 100),
-                                      std::make_pair(-100, 0), std::make_pair(-100, -100),
-                                      std::make_pair(0, -100), std::make_pair(100, -100) };
-
-    int orginalRank = (*king)->rank();
-    int orginalFile = (*king)->file();
-
-    vecOfPairs badMoves;
-    vecOfPairs goodMoves;
-    vecOfPairs kingSavingPositions;
-    vecOfPairs evenMoreSaving;
-
-    if (color == figureColors::white)
-    {
-        badMoves = blackAttackingFields_;
-    }
-    else
-    {
-        badMoves = whiteAttackingFields_;
-    }
-
-    for (const auto& direction: possibleDirections)
-    {
-        int newRank = orginalRank + direction.first;
-        int newFile = orginalFile + direction.second;
-
-        if (newRank < 0 || newRank > 700 || newFile < 0 || newFile > 700)
-            continue;
-
-        if ((*king)->moveIsValidWrapper(newRank, newFile))
-            goodMoves.push_back(std::make_pair(newRank, newFile));
-    }
-
-
-    for (auto goodMove : goodMoves)
-    {
-        if (std::find(badMoves.begin(), badMoves.end(), goodMove) == badMoves.end())
-        {
-            qDebug() << "Pole " << goodMove.first << ", " << goodMove.second << " nie jest niczym zagrożone";
-            // check if any piece can go to that field
-        }
-        else
-        {
-            qDebug() << "Pole " << goodMove.first << ", " << goodMove.second << " odpada";
-            for (auto& piece : figures)
-            {
-                for (auto& p : piece.second)
-                {
-                    if (p->color == color && piece.first != "King")
-                    {
-                        auto temp = p->dangeredPositions();
-                        kingSavingPositions.insert(kingSavingPositions.end(), temp.begin(), temp.end());
-                    }
-                }
-            }
-            if (std::find(kingSavingPositions.begin(), kingSavingPositions.end(), goodMove) != kingSavingPositions.end())
-            {
-                evenMoreSaving.emplace_back(goodMove);
-            }
-            for (auto& eMS : evenMoreSaving)
-            {
-                if (std::find(badMoves.begin(), badMoves.end(), eMS) != badMoves.end())
-                    qDebug() << "King can be saved by: " << eMS.first << ", " << eMS.second;
-            }
-        }
-    }
-}
 
 void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors color)
 {
@@ -458,16 +467,18 @@ void Board::checkIfThereIsFewFiguresOnSameField(int col, int row, figureColors c
     {
         for (auto& p : piece.second)
         {
-            if (p->rank() == col && p->file() == row)
+            if (p->rank() == col && p->file() == row)   // related to figure position
             {
                 counter++;
                 if (p->color != color && piece.first != "King")
-                    emit canBeat(true, col, row);
+                {
+                    if (!p->isCheck())
+                        emit canBeat(true, col, row);
+                }
             }
         }
     }
 
-    // qDebug() << "counter: " << counter;
     emit fieldIsOccupied(counter > 1);
     emit thereIsSomethingOnTheWay(counter == 1);
 

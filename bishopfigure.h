@@ -7,7 +7,7 @@ class BishopFigure : virtual public AbstractFigure
 {
 public:
     explicit BishopFigure(figureColors type);
-    bool moveIsValidWrapper(int col, int row) { return moveIsValid(); }
+    bool moveIsValidWrapper(int col, int row);
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();

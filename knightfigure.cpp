@@ -26,11 +26,31 @@ bool KnightFigure::moveIsValid()
             return false;
 
         emit addDangeredFields();
-        if (isCheck())
-            return false;
+//        if (isCheck())
+//            return false;
 
         if (isItPossibleToBeat())
             beatFigure(rank(), file(), color);
+
+        return true;
+    }
+
+    return false;
+
+}
+
+bool KnightFigure::moveIsValidWrapper(int col, int row)
+{
+    int colJump = std::abs(previousPosition.second - row);
+    int rowJump = std::abs(previousPosition.first - col);
+
+    if ((colJump == 100 && rowJump == 200) || (colJump == 200 && rowJump == 100))
+    {
+        if (thereIsOtherPieceOnField() && !isItPossibleToBeat())
+            return false;
+
+        if (isCheck())
+            return false;
 
         return true;
     }

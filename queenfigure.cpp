@@ -19,21 +19,55 @@ bool QueenFigure::moveIsValid()
 
     if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0) || (rowOffset == colOffset)))
         return false;
-
     if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
+    {
         return false;
-
-    emit addDangeredFields();
-    if (isCheck())      // problem z kolejnością, nie ma możliwości zbicia grożącego pionka
-        return false;
+    }
 
     if (isItPossibleToBeat())
     {
-
         emit beatFigure(rank(), file(), color);
     }
 
+//    if (isCheck())      // problem z kolejnością, nie ma możliwości zbicia grożącego pionka
+//    {
+//        return false;
+//    }
+
     // dangeredPositions();
+    emit addDangeredFields();
+    return true;
+}
+
+
+bool QueenFigure::moveIsValidWrapper(int col, int row)
+{
+    setPos(col, row);
+    int rowOffset = int(std::abs(file() - previousPosition.second));
+    int colOffset = int(std::abs(rank() - previousPosition.first));
+
+    if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0) || (rowOffset == colOffset)))
+        return false;
+
+    if (isThereAnythingOnMyWay() || thereIsOtherPieceOnField())
+    {
+        setPos(previousPosition.first, previousPosition.second);
+        return false;
+    }
+
+    if (isCheck())  // problem z kolejnością, nie ma możliwości zbicia grożącego pionka
+    {
+        setPos(previousPosition.first, previousPosition.second);
+        return false;
+    }
+
+    if (isItPossibleToBeat())
+    {
+        setPos(previousPosition.first, previousPosition.second);
+        return true;
+    }
+
+    setPos(previousPosition.first, previousPosition.second);
     return true;
 }
 
@@ -45,6 +79,7 @@ bool QueenFigure::isItPossibleToBeat()
 bool QueenFigure::thereIsOtherPieceOnField()
 {
     emit checkIfOtherFigureHasSamePosition(rank(), file(), color);
+    qDebug() << occupancy;
     return occupancy;
 }
 
@@ -129,11 +164,6 @@ vecOfPairs QueenFigure::dangeredPositions()
         col = rank();
         row = file();
     }
-
-//    for (auto d : dangeredPos)
-//    {
-//        qDebug() << "(" << d.first << ", " << d.second << ")";
-//    }
 
     return dangeredPos;
 }
