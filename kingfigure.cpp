@@ -62,7 +62,7 @@ bool KingFigure::moveIsValid()
     return true;
 }
 
-bool KingFigure::dupa(int col, int row)
+bool KingFigure::moveIsValidWrapper(int col, int row)
 {
     emit checkIfOtherFigureHasSamePosition(col, row, color);
     if (blocked_by_piece && !isItPossibleToBeat())
@@ -140,11 +140,17 @@ vecOfPairs KingFigure::dangeredPositions()
         col = rank();
         row = file();
     }
-
-//    for (auto d : dangeredPos)
-//    {
-//        qDebug() << "(" << d.first << ", " << d.second << ")";
-//    }
-
     return dangeredPos;
+}
+
+vecOfPairs KingFigure::possibleMoves()
+{
+    vecOfPairs possibleMovesVec;
+    int step = 100;
+    if (!isWhite())
+        step = -step;
+
+    possibleMovesVec.emplace_back(rank() + step, file());
+
+    return possibleMovesVec;
 }

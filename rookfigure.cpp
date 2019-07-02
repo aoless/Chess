@@ -35,6 +35,26 @@ bool RookFigure::moveIsValid()
     return true;
 }
 
+
+bool RookFigure::moveIsValidWrapper(int col, int row)
+{
+    int rowOffset = int(std::abs(row - previousPosition.second));
+    int colOffset = int(std::abs(col - previousPosition.first));
+
+    if (!((rowOffset > 0 && colOffset == 0) || (rowOffset == 0 && colOffset > 0)))
+        return false;
+
+    if ((isThereAnythingOnMyWay() || thereIsOtherPieceOnField()) && !isItPossibleToBeat())
+        return false;
+
+    if (isCheck())
+        return false;
+
+    return true;
+}
+
+
+
 bool RookFigure::isItPossibleToBeat()
 {
     return possible_to_beat;
@@ -48,7 +68,6 @@ bool RookFigure::thereIsOtherPieceOnField()
 
 bool RookFigure::isThereAnythingOnMyWay()
 {
-    qDebug() << "Ja tu wchodzę?";
     int col, row;
     int colOffset = 0;
     int rowOffset = 0;
@@ -119,4 +138,9 @@ vecOfPairs RookFigure::dangeredPositions()
 //    }
 
     return dangeredPos;
+}
+
+vecOfPairs RookFigure::possibleMoves()
+{
+    return dangeredPositions();
 }

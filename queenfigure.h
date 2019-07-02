@@ -7,11 +7,12 @@ class QueenFigure: virtual public AbstractFigure
 {
 public:
     explicit QueenFigure(figureColors type);
-    bool dupa(int col, int row) { return moveIsValid(); }
+    bool moveIsValidWrapper(int col, int row);
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
     vecOfPairs dangeredPositions();
+    vecOfPairs possibleMoves();
 };
 #endif // QUEENFIGURE_H

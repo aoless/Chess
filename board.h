@@ -38,7 +38,7 @@ public:
     void addKingToBoard(QGraphicsScene*, const AbstractFigureUniqueVec&);
     void connecter(const AbstractFigure*);
     void setUpFigureOnScene(QGraphicsScene*, AbstractFigure*, std::pair<qreal, qreal>);
-    void checkIfChek();
+    void lookForAKingAndCheckIfHeIsInCheck();
 public slots:
     void enableToMoveFigure(AbstractFigure* figure);
     void refuseToMoveFigure(AbstractFigure* figure);
@@ -49,7 +49,7 @@ public slots:
     void disableCasting(figureColors color);
     void addDangeredFields();
     void propagateSignalUnitlItMeetsFigure(int col, int row);
-    void chekIfCheckMate(figureColors color);
+    void chekIfCheckMate(AbstractFigure* king);
 signals:
     void fieldIsOccupied(bool occupied);
     void thereIsSomethingOnTheWay(bool blockedByPiece);

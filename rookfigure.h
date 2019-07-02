@@ -7,12 +7,13 @@ class RookFigure : virtual public AbstractFigure
 {
 public:
     explicit RookFigure(figureColors color);
-    bool dupa(int col, int row) { return moveIsValid(); }
+    bool moveIsValidWrapper(int col, int row);
     bool moveIsValid();
     bool isItPossibleToBeat();
     bool thereIsOtherPieceOnField();
     bool isThereAnythingOnMyWay();
     vecOfPairs dangeredPositions();
+    vecOfPairs possibleMoves();
 };
 
 #endif // ROOKFIGURE_H
